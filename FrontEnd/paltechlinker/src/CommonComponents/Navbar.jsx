@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { AppBar, Toolbar, Box } from "@mui/material";
 import { Link, useLocation } from "react-router-dom";
-import Logo from "../Assets/Images/logo.png";
+import Logo from "../Assets/Images/logo2.png";
 import Colors from "../Assets/Colors/Colors";
 
 const Pages = [
