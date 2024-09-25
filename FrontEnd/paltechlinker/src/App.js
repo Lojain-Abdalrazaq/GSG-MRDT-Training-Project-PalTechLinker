@@ -4,7 +4,7 @@ import "./App.css";
 import Navbar from "./CommonComponents/Navbar";
 import SignUp from "./Pages/Signup/Signup";
 import Footer from "./CommonComponents/Footer";
-
+import Login from "./Pages/Login/Login";
 function App() {
   return (
     <Router>
@@ -12,6 +12,7 @@ function App() {
         <Navbar />
         <Routes>
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/login" element={<Login />} />
         </Routes>
         <Footer />
       </div>
