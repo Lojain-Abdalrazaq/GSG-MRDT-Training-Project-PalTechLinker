@@ -6,4 +6,6 @@ public interface CompanyService {
     
         CompanyEntity save(CompanyEntity companyEntity);
 
+        CompanyEntity partialUpdate(Long id, CompanyEntity companyNewData);
+
 }
