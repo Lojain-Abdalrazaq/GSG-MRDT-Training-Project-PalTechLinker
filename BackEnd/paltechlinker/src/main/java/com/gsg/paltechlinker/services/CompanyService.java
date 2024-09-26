@@ -8,4 +8,6 @@ public interface CompanyService {
 
         CompanyEntity partialUpdate(Long id, CompanyEntity companyNewData);
 
+        void delete(Long id);
+
 }

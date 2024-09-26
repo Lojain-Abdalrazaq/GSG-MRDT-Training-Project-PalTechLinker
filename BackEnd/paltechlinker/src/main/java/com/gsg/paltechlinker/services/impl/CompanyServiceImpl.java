@@ -37,5 +37,10 @@ public class CompanyServiceImpl implements CompanyService {
             return companyRepository.save(storedCompany);
         }).orElseThrow(() -> new RuntimeException("Company doesn't exist"));
     }
+
+    @Override
+    public void delete(Long id) {
+        companyRepository.deleteById(id);
+    }
     
 }
