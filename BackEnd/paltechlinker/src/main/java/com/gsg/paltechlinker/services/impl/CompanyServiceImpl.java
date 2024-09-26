@@ -2,6 +2,8 @@ package com.gsg.paltechlinker.services.impl;
 
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.gsg.paltechlinker.domain.entities.CompanyEntity;
@@ -41,6 +43,11 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public void delete(Long id) {
         companyRepository.deleteById(id);
+    }
+
+    @Override
+    public Page<CompanyEntity> findAll(Pageable pageable) {
+        return companyRepository.findAll(pageable);
     }
     
 }
