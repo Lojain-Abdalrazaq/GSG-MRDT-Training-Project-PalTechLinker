@@ -44,7 +44,12 @@ public class CompanyServiceImpl implements CompanyService {
     public void delete(Long id) {
         companyRepository.deleteById(id);
     }
-
+    
+    @Override
+    public Optional<CompanyEntity> findOne(Long id) {
+        return companyRepository.findById(id);
+    }
+    
     @Override
     public Page<CompanyEntity> findAll(Pageable pageable) {
         return companyRepository.findAll(pageable);
