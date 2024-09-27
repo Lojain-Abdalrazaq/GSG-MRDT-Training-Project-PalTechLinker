@@ -95,7 +95,7 @@ public class CompanyControllerIntegrationTests {
     @Test
     public void testThatListCompanyReturnsListOfCompanies() throws Exception {
         CompanyEntity companyEntity = TestDataUtil.createTestCompanyEntityA();
-        companyService.save(companyEntity);
+        CompanyEntity savedCompany = companyService.save(companyEntity);
 
         mockMvc.perform(
             MockMvcRequestBuilders.get("/api/companies/read/all")
@@ -105,37 +105,37 @@ public class CompanyControllerIntegrationTests {
         ).andExpect(
             MockMvcResultMatchers.jsonPath("$.content[0].id").isNumber()
         ).andExpect(
-            MockMvcResultMatchers.jsonPath("$.content[0].name").value(companyEntity.getName())
+            MockMvcResultMatchers.jsonPath("$.content[0].name").value(savedCompany.getName())
         ).andExpect(
-            MockMvcResultMatchers.jsonPath("$.content[0].email").value(companyEntity.getEmail())
+            MockMvcResultMatchers.jsonPath("$.content[0].email").value(savedCompany.getEmail())
         ).andExpect(
-            MockMvcResultMatchers.jsonPath("$.content[0].password").value(companyEntity.getPassword())
+            MockMvcResultMatchers.jsonPath("$.content[0].password").value(savedCompany.getPassword())
         ).andExpect(
-            MockMvcResultMatchers.jsonPath("$.content[0].address").value(companyEntity.getAddress())
+            MockMvcResultMatchers.jsonPath("$.content[0].address").value(savedCompany.getAddress())
         ).andExpect(
-            MockMvcResultMatchers.jsonPath("$.content[0].description").value(companyEntity.getDescription())
+            MockMvcResultMatchers.jsonPath("$.content[0].description").value(savedCompany.getDescription())
         ).andExpect(
-            MockMvcResultMatchers.jsonPath("$.content[0].websiteLink").value(companyEntity.getWebsiteLink())
+            MockMvcResultMatchers.jsonPath("$.content[0].websiteLink").value(savedCompany.getWebsiteLink())
         ).andExpect(
-            MockMvcResultMatchers.jsonPath("$.content[0].phoneNumber").value(companyEntity.getPhoneNumber())
+            MockMvcResultMatchers.jsonPath("$.content[0].phoneNumber").value(savedCompany.getPhoneNumber())
         ).andExpect(
-            MockMvcResultMatchers.jsonPath("$.content[0].contactEmail").value(companyEntity.getContactEmail())
+            MockMvcResultMatchers.jsonPath("$.content[0].contactEmail").value(savedCompany.getContactEmail())
         ).andExpect(
-            MockMvcResultMatchers.jsonPath("$.content[0].numberOfEmployees").value(companyEntity.getNumberOfEmployees())
+            MockMvcResultMatchers.jsonPath("$.content[0].numberOfEmployees").value(savedCompany.getNumberOfEmployees())
         ).andExpect(
-            MockMvcResultMatchers.jsonPath("$.content[0].socialAccount").value(companyEntity.getSocialAccount())
+            MockMvcResultMatchers.jsonPath("$.content[0].socialAccount").value(savedCompany.getSocialAccount())
         ).andExpect(
-            MockMvcResultMatchers.jsonPath("$.content[0].imageUrl").value(companyEntity.getImageUrl())
+            MockMvcResultMatchers.jsonPath("$.content[0].imageUrl").value(savedCompany.getImageUrl())
         );
     }
 
     @Test
     public void testThatGetCompanyReturnsHttpStatus200WhenCompanyExists() throws Exception {
         CompanyEntity companyEntity = TestDataUtil.createTestCompanyEntityA();
-        companyService.save(companyEntity);
+        CompanyEntity savedCompany = companyService.save(companyEntity);
 
         mockMvc.perform(
-            MockMvcRequestBuilders.get("/api/companies/read/" + companyEntity.getId())
+            MockMvcRequestBuilders.get("/api/companies/read/" + savedCompany.getId())
                     .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(
             MockMvcResultMatchers.status().isOk()
@@ -155,35 +155,35 @@ public class CompanyControllerIntegrationTests {
     @Test
     public void testThatGetCompanyReturnsCompanyIfExists() throws Exception {
         CompanyEntity companyEntity = TestDataUtil.createTestCompanyEntityA();
-        companyService.save(companyEntity);
+        CompanyEntity savedCompany = companyService.save(companyEntity);
 
         mockMvc.perform(
-            MockMvcRequestBuilders.get("/api/companies/read/" + companyEntity.getId())
+            MockMvcRequestBuilders.get("/api/companies/read/" + savedCompany.getId())
                     .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(
             MockMvcResultMatchers.jsonPath("$.id").isNumber()
         ).andExpect(
-            MockMvcResultMatchers.jsonPath("$.name").value(companyEntity.getName())
+            MockMvcResultMatchers.jsonPath("$.name").value(savedCompany.getName())
         ).andExpect(
-            MockMvcResultMatchers.jsonPath("$.email").value(companyEntity.getEmail())
+            MockMvcResultMatchers.jsonPath("$.email").value(savedCompany.getEmail())
         ).andExpect(
-            MockMvcResultMatchers.jsonPath("$.password").value(companyEntity.getPassword())
+            MockMvcResultMatchers.jsonPath("$.password").value(savedCompany.getPassword())
         ).andExpect(
-            MockMvcResultMatchers.jsonPath("$.address").value(companyEntity.getAddress())
+            MockMvcResultMatchers.jsonPath("$.address").value(savedCompany.getAddress())
         ).andExpect(
-            MockMvcResultMatchers.jsonPath("$.description").value(companyEntity.getDescription())
+            MockMvcResultMatchers.jsonPath("$.description").value(savedCompany.getDescription())
         ).andExpect(
-            MockMvcResultMatchers.jsonPath("$.websiteLink").value(companyEntity.getWebsiteLink())
+            MockMvcResultMatchers.jsonPath("$.websiteLink").value(savedCompany.getWebsiteLink())
         ).andExpect(
-            MockMvcResultMatchers.jsonPath("$.phoneNumber").value(companyEntity.getPhoneNumber())
+            MockMvcResultMatchers.jsonPath("$.phoneNumber").value(savedCompany.getPhoneNumber())
         ).andExpect(
-            MockMvcResultMatchers.jsonPath("$.contactEmail").value(companyEntity.getContactEmail())
+            MockMvcResultMatchers.jsonPath("$.contactEmail").value(savedCompany.getContactEmail())
         ).andExpect(
-            MockMvcResultMatchers.jsonPath("$.numberOfEmployees").value(companyEntity.getNumberOfEmployees())
+            MockMvcResultMatchers.jsonPath("$.numberOfEmployees").value(savedCompany.getNumberOfEmployees())
         ).andExpect(
-            MockMvcResultMatchers.jsonPath("$.socialAccount").value(companyEntity.getSocialAccount())
+            MockMvcResultMatchers.jsonPath("$.socialAccount").value(savedCompany.getSocialAccount())
         ).andExpect(
-            MockMvcResultMatchers.jsonPath("$.imageUrl").value(companyEntity.getImageUrl())
+            MockMvcResultMatchers.jsonPath("$.imageUrl").value(savedCompany.getImageUrl())
         );
     }
 
