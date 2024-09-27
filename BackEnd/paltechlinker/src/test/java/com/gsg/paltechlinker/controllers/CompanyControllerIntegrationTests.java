@@ -311,4 +311,16 @@ public class CompanyControllerIntegrationTests {
         );
     }
 
+    @Test
+    public void testThatDeleteCompanyReturnsHttpStatus204ForExistingCompany() throws Exception {
+        CompanyEntity companyEntity = TestDataUtil.createTestCompanyEntityA();
+        CompanyEntity savedCompany = companyService.save(companyEntity);
+
+        mockMvc.perform(
+            MockMvcRequestBuilders.delete("/api/companies/delete/" + savedCompany.getId())
+                    .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+            MockMvcResultMatchers.status().isNoContent()
+        );
+    }
 }
