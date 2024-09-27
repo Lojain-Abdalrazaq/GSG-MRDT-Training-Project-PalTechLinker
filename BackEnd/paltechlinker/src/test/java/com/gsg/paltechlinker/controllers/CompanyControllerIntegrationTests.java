@@ -261,4 +261,23 @@ public class CompanyControllerIntegrationTests {
         );
     }
 
+    @Test
+    public void testThatPartialUpdateReturnsHttpStatus200WhenCompanyExists() throws Exception {
+        CompanyEntity companyEntityToBeUpdated = TestDataUtil.createTestCompanyEntityA();
+        companyService.save(companyEntityToBeUpdated);
+
+        companyEntityToBeUpdated.setName("updated");
+
+        String companyJson = objectMapper.writeValueAsString(companyEntityToBeUpdated);
+
+        mockMvc.perform(
+            MockMvcRequestBuilders.patch("/api/companies/update/partial/" + companyEntityToBeUpdated.getId())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(companyJson)
+        ).andExpect(
+            MockMvcResultMatchers.status().isOk()
+        );
+    }
+
+
 }
