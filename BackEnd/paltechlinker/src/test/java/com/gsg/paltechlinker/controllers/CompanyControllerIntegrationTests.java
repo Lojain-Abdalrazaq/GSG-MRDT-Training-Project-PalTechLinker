@@ -207,4 +207,19 @@ public class CompanyControllerIntegrationTests {
 
     }
 
+    @Test
+    public void testThatFullUpdateCompanyReturnsHttpStatus404WhenNoCompanyExists() throws Exception {
+        CompanyEntity companyEntity = TestDataUtil.createTestCompanyEntityA();
+        String companyJson = objectMapper.writeValueAsString(companyEntity);
+
+        mockMvc.perform(
+            MockMvcRequestBuilders.put("/api/companies/update/111")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(companyJson)
+        ).andExpect(
+            MockMvcResultMatchers.status().isNotFound()
+        );
+
+    }
+
 }
