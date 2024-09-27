@@ -323,4 +323,14 @@ public class CompanyControllerIntegrationTests {
             MockMvcResultMatchers.status().isNoContent()
         );
     }
+
+    @Test
+    public void testThatDeleteCompanyReturnsHttpStatus204ForNonExistingCompany() throws Exception {
+        mockMvc.perform(
+            MockMvcRequestBuilders.delete("/api/companies/delete/1")
+                    .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+            MockMvcResultMatchers.status().isNoContent()
+        );
+    }
 }
