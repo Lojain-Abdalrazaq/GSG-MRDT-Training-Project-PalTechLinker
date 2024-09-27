@@ -10,11 +10,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 
 @RestController
 public class CompanyController {
+
+    private static final String COMPANIES = "/companies", COMPANIES_ID = "companies/{id}";
 
     private CompanyService companyService;
     private Mapper<CompanyEntity, CompanyDto> mapper;
@@ -26,7 +31,7 @@ public class CompanyController {
     }
     
 
-    @PostMapping("/companies")
+    @PostMapping(COMPANIES)
     public ResponseEntity<CompanyDto> createCompany(@RequestBody CompanyDto companyDto) {
         CompanyEntity companyEntity = mapper.mapFrom(companyDto);
         CompanyEntity savedCompanyEntity = companyService.save(companyEntity);
