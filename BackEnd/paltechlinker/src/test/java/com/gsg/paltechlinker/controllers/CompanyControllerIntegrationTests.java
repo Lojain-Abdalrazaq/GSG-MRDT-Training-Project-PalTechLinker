@@ -82,4 +82,14 @@ public class CompanyControllerIntegrationTests {
         );
     }
 
+    @Test
+    public void testThatListCompaniesReturnsHttpStatus200() throws Exception {
+        mockMvc.perform(
+            MockMvcRequestBuilders.get("/api/companies/read/all")
+                    .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+            MockMvcResultMatchers.status().isOk()
+        );
+    }
+
 }
