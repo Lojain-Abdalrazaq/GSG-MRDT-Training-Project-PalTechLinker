@@ -187,4 +187,24 @@ public class CompanyControllerIntegrationTests {
         );
     }
 
+    @Test
+    public void testThatFullUpdateCompanyReturnsHttpStatus200WhenCompanyExists() throws Exception {
+        CompanyEntity companyEntityToBeUpdated = TestDataUtil.createTestCompanyEntityA();
+        CompanyEntity companyEntityWithNewData = TestDataUtil.createTestCompanyEntityB();
+
+        companyService.save(companyEntityToBeUpdated);
+
+        companyEntityWithNewData.setId(companyEntityToBeUpdated.getId());
+        String companyJson = objectMapper.writeValueAsString(companyEntityWithNewData);
+
+        mockMvc.perform(
+            MockMvcRequestBuilders.put("/api/companies/update/" + companyEntityToBeUpdated.getId())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(companyJson)
+        ).andExpect(
+            MockMvcResultMatchers.status().isOk()
+        );
+
+    }
+
 }
