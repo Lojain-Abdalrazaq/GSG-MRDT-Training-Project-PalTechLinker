@@ -6,11 +6,14 @@ import com.gsg.paltechlinker.domain.entities.CompanyEntity;
 import com.gsg.paltechlinker.mappers.Mapper;
 import com.gsg.paltechlinker.services.CompanyService;
 
+import java.util.Optional;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
@@ -36,6 +39,15 @@ public class CompanyController {
         CompanyEntity companyEntity = mapper.mapFrom(companyDto);
         CompanyEntity savedCompanyEntity = companyService.save(companyEntity);
         return new ResponseEntity<>(mapper.mapTo(savedCompanyEntity), HttpStatus.CREATED);
+    }
+    
+    @GetMapping(COMPANIES_ID)
+    public ResponseEntity<CompanyDto> getCompany(@PathVariable Long id) {
+        Optional<CompanyEntity> foundCompanyEntity = companyService.findOne(id);
+        return foundCompanyEntity.map(companyEntity -> {
+            return new ResponseEntity<>(mapper.mapTo(companyEntity), HttpStatus.OK);
+            
+        }).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
     
     
