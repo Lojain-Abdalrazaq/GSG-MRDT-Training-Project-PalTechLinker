@@ -19,4 +19,6 @@ public interface CompanyService {
 
         void delete(Long id);
 
+        boolean isExists(Long id);
+
 }
