@@ -152,4 +152,39 @@ public class CompanyControllerIntegrationTests {
         );
     }
 
+    @Test
+    public void testThatGetCompanyReturnsCompanyIfExists() throws Exception {
+        CompanyEntity companyEntity = TestDataUtil.createTestCompanyEntityA();
+        companyService.save(companyEntity);
+
+        mockMvc.perform(
+            MockMvcRequestBuilders.get("/api/companies/read/" + companyEntity.getId())
+                    .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+            MockMvcResultMatchers.jsonPath("$.id").isNumber()
+        ).andExpect(
+            MockMvcResultMatchers.jsonPath("$.name").value(companyEntity.getName())
+        ).andExpect(
+            MockMvcResultMatchers.jsonPath("$.email").value(companyEntity.getEmail())
+        ).andExpect(
+            MockMvcResultMatchers.jsonPath("$.password").value(companyEntity.getPassword())
+        ).andExpect(
+            MockMvcResultMatchers.jsonPath("$.address").value(companyEntity.getAddress())
+        ).andExpect(
+            MockMvcResultMatchers.jsonPath("$.description").value(companyEntity.getDescription())
+        ).andExpect(
+            MockMvcResultMatchers.jsonPath("$.websiteLink").value(companyEntity.getWebsiteLink())
+        ).andExpect(
+            MockMvcResultMatchers.jsonPath("$.phoneNumber").value(companyEntity.getPhoneNumber())
+        ).andExpect(
+            MockMvcResultMatchers.jsonPath("$.contactEmail").value(companyEntity.getContactEmail())
+        ).andExpect(
+            MockMvcResultMatchers.jsonPath("$.numberOfEmployees").value(companyEntity.getNumberOfEmployees())
+        ).andExpect(
+            MockMvcResultMatchers.jsonPath("$.socialAccount").value(companyEntity.getSocialAccount())
+        ).andExpect(
+            MockMvcResultMatchers.jsonPath("$.imageUrl").value(companyEntity.getImageUrl())
+        );
+    }
+
 }
