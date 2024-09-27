@@ -141,4 +141,15 @@ public class CompanyControllerIntegrationTests {
             MockMvcResultMatchers.status().isOk()
         );
     }
+
+    @Test
+    public void testThatGetCompanyReturnsHttpStatus494WhenNoCompanyExists() throws Exception {
+        mockMvc.perform(
+            MockMvcRequestBuilders.get("/api/companies/read/99")
+                    .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+            MockMvcResultMatchers.status().isNotFound()
+        );
+    }
+
 }
