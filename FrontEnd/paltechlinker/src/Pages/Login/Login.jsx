@@ -15,6 +15,7 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import * as Yup from "yup";
 import Colors from "../../Assets/Colors/Colors";
 import Image from "../../Assets/Images/login.png";
+import CustomButton from "../../CommonComponents/CustomButton";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -157,22 +158,10 @@ const Login = () => {
                     </IconButton>
                   </div>
 
-                  <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    color="primary"
-                    sx={{
-                      marginTop: "1.5rem",
-                      fontFamily: "'Cairo', sans-serif",
-                      backgroundColor: Colors.primary,
-                      "&:hover": {
-                        backgroundColor: Colors.secondary,
-                      },
-                    }}
-                  >
-                    Log In
-                  </Button>
+                  <CustomButton
+                    text="Log In"
+                    fullWidth={true} 
+                  />
                 </Form>
               )}
             </Formik>

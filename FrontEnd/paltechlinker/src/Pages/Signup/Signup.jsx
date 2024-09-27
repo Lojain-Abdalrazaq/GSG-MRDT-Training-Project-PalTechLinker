@@ -16,6 +16,7 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import * as Yup from "yup";
 import Colors from "../../Assets/Colors/Colors";
+import CustomButton from "../../CommonComponents/CustomButton";
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -389,22 +390,10 @@ const Register = () => {
                       </Button>
                     </div>
 
-                    <Button
-                      type="submit"
-                      fullWidth
-                      variant="contained"
-                      color="primary"
-                      sx={{
-                        marginTop: "1.5rem",
-                        fontFamily: "'Cairo', sans-serif",
-                        backgroundColor: Colors.primary,
-                        "&:hover": {
-                          backgroundColor: Colors.secondary,
-                        },
-                      }}
-                    >
-                      Register
-                    </Button>
+                    <CustomButton
+                      text="Register"
+                      fullWidth={true} 
+                    />
                   </Form>
                 )}
               </Formik>
