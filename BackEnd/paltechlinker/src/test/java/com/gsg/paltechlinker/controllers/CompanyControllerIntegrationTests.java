@@ -129,4 +129,16 @@ public class CompanyControllerIntegrationTests {
         );
     }
 
+    @Test
+    public void testThatGetCompanyReturnsHttpStatus200WhenCompanyExists() throws Exception {
+        CompanyEntity companyEntity = TestDataUtil.createTestCompanyEntityA();
+        companyService.save(companyEntity);
+
+        mockMvc.perform(
+            MockMvcRequestBuilders.get("/api/companies/read/" + companyEntity.getId())
+                    .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+            MockMvcResultMatchers.status().isOk()
+        );
+    }
 }
