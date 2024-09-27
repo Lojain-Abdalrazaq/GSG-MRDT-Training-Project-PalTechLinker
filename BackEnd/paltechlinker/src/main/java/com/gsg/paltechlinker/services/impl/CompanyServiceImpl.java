@@ -54,5 +54,10 @@ public class CompanyServiceImpl implements CompanyService {
     public Page<CompanyEntity> findAll(Pageable pageable) {
         return companyRepository.findAll(pageable);
     }
+
+    @Override
+    public boolean isExists(Long id) {
+        return companyRepository.existsById(id);
+    }
     
 }
