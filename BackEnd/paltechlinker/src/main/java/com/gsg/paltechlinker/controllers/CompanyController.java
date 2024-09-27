@@ -8,6 +8,8 @@ import com.gsg.paltechlinker.services.CompanyService;
 
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,9 +48,14 @@ public class CompanyController {
         Optional<CompanyEntity> foundCompanyEntity = companyService.findOne(id);
         return foundCompanyEntity.map(companyEntity -> {
             return new ResponseEntity<>(mapper.mapTo(companyEntity), HttpStatus.OK);
-            
+
         }).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
     
-    
+    @GetMapping(COMPANIES)
+    public Page<CompanyDto> listCompanies(Pageable pageable) {
+        Page<CompanyEntity> companies = companyService.findAll(pageable);
+        return companies.map(mapper::mapTo);
+    }
+
 }
