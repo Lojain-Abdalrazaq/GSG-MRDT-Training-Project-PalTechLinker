@@ -1,9 +1,6 @@
 package com.gsg.paltechlinker.domain.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @AllArgsConstructor
@@ -34,5 +31,5 @@ public class CompanyDto {
     private Integer numberOfEmployees;
     
     private String socialAccount;
-    
+
 }

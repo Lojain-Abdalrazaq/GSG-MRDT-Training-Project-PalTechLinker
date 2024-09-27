@@ -1,6 +1,6 @@
 package com.gsg.paltechlinker.controllers;
 
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.gsg.paltechlinker.domain.dto.CompanyDto;
 import com.gsg.paltechlinker.domain.entities.CompanyEntity;
 import com.gsg.paltechlinker.mappers.Mapper;
@@ -10,19 +10,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
 
 
 @RestController
+@RequestMapping("/api/companies")
 public class CompanyController {
-
-    private static final String COMPANIES = "/companies", COMPANIES_ID = "companies/{id}";
 
     private CompanyService companyService;
     private Mapper<CompanyEntity, CompanyDto> mapper;
@@ -34,14 +26,14 @@ public class CompanyController {
     }
     
 
-    @PostMapping(COMPANIES)
+    @PostMapping("/create")
     public ResponseEntity<CompanyDto> createCompany(@RequestBody CompanyDto companyDto) {
         CompanyEntity companyEntity = mapper.mapFrom(companyDto);
         CompanyEntity savedCompanyEntity = companyService.save(companyEntity);
         return new ResponseEntity<>(mapper.mapTo(savedCompanyEntity), HttpStatus.CREATED);
     }
-    
-    @GetMapping(COMPANIES_ID)
+
+    @GetMapping("/read/{id}")
     public ResponseEntity<CompanyDto> getCompany(@PathVariable Long id) {
         Optional<CompanyEntity> foundCompanyEntity = companyService.findOne(id);
         return foundCompanyEntity.map(companyEntity -> {
@@ -50,13 +42,13 @@ public class CompanyController {
         }).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
     
-    @GetMapping(COMPANIES)
+    @GetMapping("/read/all")
     public Page<CompanyDto> listCompanies(Pageable pageable) {
         Page<CompanyEntity> companies = companyService.findAll(pageable);
         return companies.map(mapper::mapTo);
     }
 
-    @PutMapping(COMPANIES_ID)
+    @PutMapping("/update/{id}")
     public ResponseEntity<CompanyDto> fullUpdateCompany(@PathVariable Long id, @RequestBody CompanyDto companyDtoWithNewData) {
         if (!companyService.isExists(id))
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -68,7 +60,7 @@ public class CompanyController {
         return new ResponseEntity<>(mapper.mapTo(updatedCompanyEntity), HttpStatus.OK);
     }
 
-    @PatchMapping(COMPANIES_ID)
+    @PatchMapping("/update/partial/{id}")
     public ResponseEntity<CompanyDto> partialUpdateCompany(@PathVariable Long id, @RequestBody CompanyDto companyDtoWithNewData) {
         if (!companyService.isExists(id))
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -78,7 +70,7 @@ public class CompanyController {
         return new ResponseEntity<>(mapper.mapTo(updatedCompanyEntity), HttpStatus.OK);
     }
 
-    @DeleteMapping(COMPANIES_ID)
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity deleteCompany(@PathVariable Long id) {
         companyService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
