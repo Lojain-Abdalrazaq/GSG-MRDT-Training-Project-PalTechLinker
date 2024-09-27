@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PutMapping;
+
 
 
 
@@ -56,6 +58,18 @@ public class CompanyController {
     public Page<CompanyDto> listCompanies(Pageable pageable) {
         Page<CompanyEntity> companies = companyService.findAll(pageable);
         return companies.map(mapper::mapTo);
+    }
+
+    @PutMapping(COMPANIES_ID)
+    public ResponseEntity<CompanyDto> fullUpdateCompany(@PathVariable Long id, @RequestBody CompanyDto companyDtoWithNewData) {
+        if (!companyService.isExists(id))
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        companyDtoWithNewData.setId(id);
+
+        CompanyEntity companyEntityWithNewData = mapper.mapFrom(companyDtoWithNewData);
+        CompanyEntity saveCompanyEntity = companyService.save(companyEntityWithNewData);
+        return new ResponseEntity<>(mapper.mapTo(saveCompanyEntity), HttpStatus.OK);
     }
 
 }
