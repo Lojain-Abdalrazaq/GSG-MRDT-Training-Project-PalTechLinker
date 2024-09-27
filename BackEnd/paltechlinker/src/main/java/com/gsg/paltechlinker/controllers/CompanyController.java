@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -68,8 +69,18 @@ public class CompanyController {
         companyDtoWithNewData.setId(id);
 
         CompanyEntity companyEntityWithNewData = mapper.mapFrom(companyDtoWithNewData);
-        CompanyEntity saveCompanyEntity = companyService.save(companyEntityWithNewData);
-        return new ResponseEntity<>(mapper.mapTo(saveCompanyEntity), HttpStatus.OK);
+        CompanyEntity updatedCompanyEntity = companyService.save(companyEntityWithNewData);
+        return new ResponseEntity<>(mapper.mapTo(updatedCompanyEntity), HttpStatus.OK);
+    }
+
+    @PatchMapping(COMPANIES_ID)
+    public ResponseEntity<CompanyDto> partialUpdateCompany(@PathVariable Long id, @RequestBody CompanyDto companyDtoWithNewData) {
+        if (!companyService.isExists(id))
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        CompanyEntity companyEntityWithNewData = mapper.mapFrom(companyDtoWithNewData);
+        CompanyEntity  updatedCompanyEntity = companyService.partialUpdate(id, companyEntityWithNewData);
+        return new ResponseEntity<>(mapper.mapTo(updatedCompanyEntity), HttpStatus.OK);
     }
 
 }
