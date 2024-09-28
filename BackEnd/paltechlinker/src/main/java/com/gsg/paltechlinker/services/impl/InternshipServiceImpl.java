@@ -7,10 +7,19 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.gsg.paltechlinker.domain.entities.InternshipEntity;
+import com.gsg.paltechlinker.repositories.InternshipRepository;
 import com.gsg.paltechlinker.services.InternshipService;
 
 @Service
 public class InternshipServiceImpl implements InternshipService {
+
+    private InternshipRepository internshipRepository;
+
+
+    public InternshipServiceImpl(InternshipRepository internshipRepository) {
+        this.internshipRepository = internshipRepository;
+    }
+    
 
     @Override
     public InternshipEntity save(InternshipEntity internshipEntity) {
