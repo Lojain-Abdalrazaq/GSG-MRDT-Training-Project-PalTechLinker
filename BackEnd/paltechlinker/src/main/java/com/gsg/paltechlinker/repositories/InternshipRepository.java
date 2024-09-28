@@ -5,9 +5,10 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 import com.gsg.paltechlinker.domain.entities.CompanyEntity;
+import com.gsg.paltechlinker.domain.entities.InternshipEntity;
 
 @Repository
-public interface InternshipRepository extends CrudRepository<CompanyEntity, Long>,
-                                            PagingAndSortingRepository<CompanyEntity, Long> {    
+public interface InternshipRepository extends CrudRepository<InternshipEntity, Long>,
+                                            PagingAndSortingRepository<InternshipEntity, Long> {    
     
 }
