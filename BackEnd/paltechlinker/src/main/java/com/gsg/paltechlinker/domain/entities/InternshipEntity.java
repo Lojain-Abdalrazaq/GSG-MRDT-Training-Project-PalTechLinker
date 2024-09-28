@@ -27,7 +27,7 @@ import lombok.NoArgsConstructor;
 public class InternshipEntity {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "companies_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "intern_seq")
     private Long id;
 
     @Column(length = 100, nullable = false)
