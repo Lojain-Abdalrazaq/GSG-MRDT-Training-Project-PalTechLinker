@@ -220,5 +220,44 @@ public class InternshipControllerIntegrationTests {
         );
     }
 
+    @Test
+    public void testThatPartialUpdateInternshipReturnsHttpStatus404WhenNoInternshipExists() throws Exception {
+        InternshipEntity internshipEntityWithNewData = TestDataUtil.createTestInternshipEntityB();
+        String internJson = objectMapper.writeValueAsString(internshipEntityWithNewData);
+
+        mockMvc.perform(
+            MockMvcRequestBuilders.patch("/api/interns/update/partial/1")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(internJson)
+        ).andExpect(
+            MockMvcResultMatchers.status().isNotFound()
+        );
+    }
+
+    @Test
+    public void testThatPartialUpdateInternshipUpdatesExistingAuthor() throws Exception {
+        InternshipEntity internshipEntityToBeUpdated = TestDataUtil.createTestInternshipEntityA();
+        internshipService.save(internshipEntityToBeUpdated);
+
+        internshipEntityToBeUpdated.setName("UPDATED");
+        String internJson = objectMapper.writeValueAsString(internshipEntityToBeUpdated);
+
+        mockMvc.perform(
+            MockMvcRequestBuilders.patch("/api/interns/update/partial/" + internshipEntityToBeUpdated.getId())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(internJson)
+        ).andExpect(
+            MockMvcResultMatchers.jsonPath("$.id").isNumber()
+        ).andExpect(
+            MockMvcResultMatchers.jsonPath("$.name").value("UPDATED")
+        ).andExpect(
+            MockMvcResultMatchers.jsonPath("$.description").value(internshipEntityToBeUpdated.getDescription())
+        ).andExpect(
+            MockMvcResultMatchers.jsonPath("$.applicationLink").value(internshipEntityToBeUpdated.getApplicationLink())
+        ).andExpect(
+            MockMvcResultMatchers.jsonPath("$.status").value(internshipEntityToBeUpdated.getStatus().name())
+        );
+    }
+
 
 }
