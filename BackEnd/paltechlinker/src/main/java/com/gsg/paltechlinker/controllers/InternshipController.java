@@ -10,9 +10,13 @@ import com.gsg.paltechlinker.mappers.Mapper;
 import com.gsg.paltechlinker.services.CompanyService;
 import com.gsg.paltechlinker.services.InternshipService;
 
+import java.util.Optional;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -38,5 +42,13 @@ public class InternshipController {
         return new ResponseEntity<>(mapper.mapTo(savedInternshipEntity), HttpStatus.CREATED);
     }
     
+    @GetMapping("/read/{id}")
+    public ResponseEntity<CompanyDto> getCompany(@PathVariable Long id) {
+        Optional<CompanyEntity> foundCompanyEntity = companyService.findOne(id);
+        return foundCompanyEntity.map(companyEntity -> {
+            return new ResponseEntity<>(mapper.mapTo(companyEntity), HttpStatus.OK);
+
+        }).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
     
 }
