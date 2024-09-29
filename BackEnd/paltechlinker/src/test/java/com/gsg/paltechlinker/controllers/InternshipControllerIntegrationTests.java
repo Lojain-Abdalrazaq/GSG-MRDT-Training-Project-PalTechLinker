@@ -162,4 +162,18 @@ public class InternshipControllerIntegrationTests {
         );
     }
 
+    @Test
+    public void testThatFullUpdateInternshipReturnsHttpStatus404WhenNoInternshipExists() throws Exception {
+        InternshipEntity internshipEntityWithNewData = TestDataUtil.createTestInternshipEntityB();
+        String internJson = objectMapper.writeValueAsString(internshipEntityWithNewData);
+
+        mockMvc.perform(
+            MockMvcRequestBuilders.put("/api/interns/update/1")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(internJson)
+        ).andExpect(
+            MockMvcResultMatchers.status().isNotFound()
+        );
+    }
+
 }
