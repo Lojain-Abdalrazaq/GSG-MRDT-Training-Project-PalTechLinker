@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -82,6 +83,12 @@ public class InternshipController {
         InternshipEntity internshipEntityWithNewData = mapper.mapFrom(internshipDtoWithNewData);
         InternshipEntity updatedInternshipEntity = internshipService.partialUpdate(id, internshipEntityWithNewData);
         return new ResponseEntity<>(mapper.mapTo(updatedInternshipEntity), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteInternship(@PathVariable Long id) {
+        internshipService.delete(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }
