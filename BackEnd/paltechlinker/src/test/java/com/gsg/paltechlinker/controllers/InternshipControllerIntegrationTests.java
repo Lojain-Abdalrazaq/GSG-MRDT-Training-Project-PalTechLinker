@@ -144,4 +144,22 @@ public class InternshipControllerIntegrationTests {
         );
     }
 
+    @Test
+    public void testThatFullUpdateInternshipReturnsHttpStatus200WhenInternshipExists() throws Exception {
+        InternshipEntity internshipEntityToBeUpdated = TestDataUtil.createTestInternshipEntityA();
+        InternshipEntity internshipEntityWithNewData = TestDataUtil.createTestInternshipEntityB();
+
+        internshipService.save(internshipEntityToBeUpdated);
+
+        String internJson = objectMapper.writeValueAsString(internshipEntityWithNewData);
+
+        mockMvc.perform(
+            MockMvcRequestBuilders.put("/api/interns/update/" + internshipEntityToBeUpdated.getId())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(internJson)
+        ).andExpect(
+            MockMvcResultMatchers.status().isOk()
+        );
+    }
+
 }
