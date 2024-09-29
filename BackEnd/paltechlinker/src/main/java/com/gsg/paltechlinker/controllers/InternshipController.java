@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -70,6 +71,16 @@ public class InternshipController {
 
         InternshipEntity internshipEntityWithNewData = mapper.mapFrom(internshipDtoWithNewData);
         InternshipEntity updatedInternshipEntity = internshipService.save(internshipEntityWithNewData);
+        return new ResponseEntity<>(mapper.mapTo(updatedInternshipEntity), HttpStatus.OK);
+    }
+
+    @PatchMapping("/update/partial/{id}")
+    public ResponseEntity<InternshipDto> partialUpdateInternship(@PathVariable Long id, @RequestBody InternshipDto internshipDtoWithNewData) {
+        if (!internshipService.isExists(id))
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);  
+
+        InternshipEntity internshipEntityWithNewData = mapper.mapFrom(internshipDtoWithNewData);
+        InternshipEntity updatedInternshipEntity = internshipService.partialUpdate(id, internshipEntityWithNewData);
         return new ResponseEntity<>(mapper.mapTo(updatedInternshipEntity), HttpStatus.OK);
     }
 
