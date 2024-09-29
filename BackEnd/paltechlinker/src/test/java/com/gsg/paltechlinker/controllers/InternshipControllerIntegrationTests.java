@@ -121,4 +121,27 @@ public class InternshipControllerIntegrationTests {
         );
     }
 
+    @Test
+    public void testThatListInternshipReturnsListOfInternships() throws Exception {
+        InternshipEntity internshipEntity = TestDataUtil.createTestInternshipEntityA();
+        InternshipEntity savedInternshipEntity = internshipService.save(internshipEntity);
+
+        mockMvc.perform(
+            MockMvcRequestBuilders.get("/api/interns/read/all")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .param("page", "0")
+                    .param("size", "10") 
+        ).andExpect(
+            MockMvcResultMatchers.jsonPath("$.content[0].id").isNumber()
+        ).andExpect(
+            MockMvcResultMatchers.jsonPath("$.content[0].name").value(savedInternshipEntity.getName())
+        ).andExpect(
+            MockMvcResultMatchers.jsonPath("$.content[0].description").value(savedInternshipEntity.getDescription())
+        ).andExpect(
+            MockMvcResultMatchers.jsonPath("$.content[0].applicationLink").value(savedInternshipEntity.getApplicationLink())
+        ).andExpect(
+            MockMvcResultMatchers.jsonPath("$.content[0].status").value(savedInternshipEntity.getStatus().name())
+        );
+    }
+
 }
