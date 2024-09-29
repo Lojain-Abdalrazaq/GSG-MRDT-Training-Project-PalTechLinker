@@ -6,8 +6,8 @@ import Colors from "../Assets/Colors/Colors";
 
 const Pages = [
   { title: "Home", link: "/" },
-  { title: "Jobs", link: "/" },
-  { title: "Companies", link: "/" },
+  { title: "Internships", link: "/internships" },
+  { title: "Companies", link: "/companies" },
   { title: "Log In", link: "/login" },
   { title: "Sign Up", link: "/signup" },
 ];

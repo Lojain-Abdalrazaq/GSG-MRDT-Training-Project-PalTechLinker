@@ -16,7 +16,7 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import * as Yup from "yup";
 import Colors from "../../Assets/Colors/Colors";
-import Image from "../../Assets/Images/signup.jpg";
+import CustomButton from "../../CommonComponents/CustomButton";
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -390,49 +390,16 @@ const Register = () => {
                       </Button>
                     </div>
 
-                    <Button
-                      type="submit"
-                      fullWidth
-                      variant="contained"
-                      color="primary"
-                      sx={{
-                        marginTop: "1.5rem",
-                        fontFamily: "'Cairo', sans-serif",
-                        backgroundColor: Colors.primary,
-                        "&:hover": {
-                          backgroundColor: Colors.secondary,
-                        },
-                      }}
-                    >
-                      Register
-                    </Button>
+                    <CustomButton
+                      text="Register"
+                      fullWidth={true} 
+                    />
                   </Form>
                 )}
               </Formik>
             </div>
           </Paper>
         </Box>
-        {/* <Box
-          sx={{
-            width: { xs: "100%", md: "50%" },
-            display:"flex",
-            justifyContent:"flex-end",
-            flexDirection:"column",
-            alignItems:"flex-end",
-            marginTop:20
-        }}
-        >
-          <img
-            src={Image}
-            alt="Register"
-            style={{
-              width: "100%",
-              maxWidth: "500px",
-              height: "auto",
-              borderRadius: "8px",
-            }}
-          />
-        </Box> */}
       </Box>
     </Container>
   );

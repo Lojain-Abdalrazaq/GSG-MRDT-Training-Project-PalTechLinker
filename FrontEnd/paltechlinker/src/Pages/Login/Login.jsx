@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import {
-  Button,
   Container,
   TextField,
   Typography,
@@ -14,7 +13,9 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import * as Yup from "yup";
 import Colors from "../../Assets/Colors/Colors";
-import Image from "../../Assets/Images/signup.jpg";
+import Image from "../../Assets/Images/login.png";
+import CustomButton from "../../CommonComponents/CustomButton";
+
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -31,29 +32,37 @@ const Login = () => {
         alignItems: "center",
         justifyContent: "center",
         paddingBottom: 80,
-        paddingTop: 120,
-        minHeight: "100vh", 
+        paddingTop: 150,
+        minHeight: "100vh",
       }}
     >
       <Box
         sx={{
           display: "flex",
-          alignItems: "flex-start", 
-          justifyContent: "space-between", 
+          alignItems: "center",
+          justifyContent: "center",
           width: "100%",
-          maxWidth: "1200px",
-          height: "auto", 
+          maxWidth: "1000px",
+          height: "auto",
+          backgroundColor: Colors.background,
+          padding: "2rem",
+          borderRadius: "8px",
         }}
       >
         {/* Left Side: Login Form */}
-        <Box sx={{ width: { xs: "100%", md: "50%" }, paddingRight: "2rem" }}>
+        <Box
+          sx={{
+            width: { xs: "100%", md: "50%" },
+            paddingRight: { md: "2rem" },
+          }}
+        >
           <Paper
             elevation={3}
             style={{
               padding: "2rem",
               borderRadius: "8px",
               backgroundColor: Colors.background,
-              minHeight: "500px", 
+              minHeight: "400px",
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
@@ -61,7 +70,7 @@ const Login = () => {
           >
             <Typography
               component="h1"
-              variant="h5"
+              variant="h4"
               fontFamily={"'Cairo', sans-serif"}
               align="center"
             >
@@ -92,8 +101,8 @@ const Login = () => {
               }}
               validationSchema={Yup.object().shape({
                 email: Yup.string()
-                .email("Invalid email address")
-                .required("Email is required"),
+                  .email("Invalid email address")
+                  .required("Email is required"),
                 password: Yup.string().required("Password is required"),
               })}
               onSubmit={handleSubmit}
@@ -148,22 +157,10 @@ const Login = () => {
                     </IconButton>
                   </div>
 
-                  <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    color="primary"
-                    sx={{
-                      marginTop: "1.5rem",
-                      fontFamily: "'Cairo', sans-serif",
-                      backgroundColor: Colors.primary,
-                      "&:hover": {
-                        backgroundColor: Colors.secondary,
-                      },
-                    }}
-                  >
-                    Log In
-                  </Button>
+                  <CustomButton
+                    text="Log In"
+                    fullWidth={true} 
+                  />
                 </Form>
               )}
             </Formik>
@@ -177,17 +174,15 @@ const Login = () => {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            marginTop: { xs: "2rem", md: "0" },
           }}
         >
           <img
             src={Image}
             alt="Login"
             style={{
-              width: "100%", 
+              width: "100%",
               maxWidth: "500px",
               height: "auto",
-              minHeight: "500px", 
               borderRadius: "8px",
             }}
           />
