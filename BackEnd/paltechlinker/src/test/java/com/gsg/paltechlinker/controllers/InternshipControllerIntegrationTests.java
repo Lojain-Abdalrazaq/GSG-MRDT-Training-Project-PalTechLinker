@@ -270,6 +270,14 @@ public class InternshipControllerIntegrationTests {
         );
     }
 
-    
+    @Test
+    public void testThatDeleteInternshipReturnsHttpStatus204ForNonExistingInternship() throws Exception {
+        mockMvc.perform(
+            MockMvcRequestBuilders.delete("/api/interns/delete/111")
+            .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+            MockMvcResultMatchers.status().isNoContent()
+        );
+    }
 
 }
