@@ -12,6 +12,8 @@ import com.gsg.paltechlinker.services.InternshipService;
 
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -43,12 +45,18 @@ public class InternshipController {
     }
     
     @GetMapping("/read/{id}")
-    public ResponseEntity<CompanyDto> getCompany(@PathVariable Long id) {
-        Optional<CompanyEntity> foundCompanyEntity = companyService.findOne(id);
-        return foundCompanyEntity.map(companyEntity -> {
-            return new ResponseEntity<>(mapper.mapTo(companyEntity), HttpStatus.OK);
+    public ResponseEntity<InternshipDto> getInternship(@PathVariable Long id) {
+        Optional<InternshipEntity> foundInternshipEntity = internshipService.findOne(id);
+        return foundInternshipEntity.map(internshipEntity -> {
+            return new ResponseEntity<>(mapper.mapTo(internshipEntity), HttpStatus.OK);
 
         }).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
-    
+
+    @GetMapping("/read/all")
+    public Page<InternshipDto> listInternships(Pageable pageable) {
+        Page<InternshipEntity> interns = internshipService.findAll(pageable);
+        return interns.map(mapper::mapTo);
+    }
+
 }
