@@ -234,7 +234,7 @@ public class InternshipControllerIntegrationTests {
     }
 
     @Test
-    public void testThatPartialUpdateInternshipUpdatesExistingAuthor() throws Exception {
+    public void testThatPartialUpdateInternshipUpdatesExistingInternshipName() throws Exception {
         InternshipEntity internshipEntityToBeUpdated = TestDataUtil.createTestInternshipEntityA();
         internshipService.save(internshipEntityToBeUpdated);
 
