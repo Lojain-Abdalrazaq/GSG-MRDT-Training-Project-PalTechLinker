@@ -69,4 +69,16 @@ public class InternshipControllerIntegrationTests {
         );
     }
 
+    @Test
+    public void testThatGetInternshipReturnsHttpStatus200WhenInternshipExists() throws Exception {
+        InternshipEntity internshipEntity = TestDataUtil.createTestInternshipEntityA();
+        InternshipEntity savedInternshipEntity = internshipService.save(internshipEntity);
+        mockMvc.perform(
+            MockMvcRequestBuilders.get("/api/interns/read/" + savedInternshipEntity.getId())
+                    .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+            MockMvcResultMatchers.status().isOk()
+        );
+    }
+
 }
