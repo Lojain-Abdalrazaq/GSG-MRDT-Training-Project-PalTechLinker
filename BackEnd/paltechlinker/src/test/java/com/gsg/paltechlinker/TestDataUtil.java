@@ -1,7 +1,10 @@
 package com.gsg.paltechlinker;
 
 import com.gsg.paltechlinker.domain.dto.CompanyDto;
+import com.gsg.paltechlinker.domain.dto.InternshipDto;
 import com.gsg.paltechlinker.domain.entities.CompanyEntity;
+import com.gsg.paltechlinker.domain.entities.InternshipEntity;
+import com.gsg.paltechlinker.domain.enums.ApplicationStatus;
 
 public class TestDataUtil {
 
@@ -74,5 +77,49 @@ public class TestDataUtil {
                 .socialAccount("https://www.twitter.com/innovatecorp")
                 .build();
     }    
+
+    public static InternshipEntity createTestInternshipEntityA() {
+        return InternshipEntity.builder()
+                .id(1L)  
+                .name("AI Research Internship")
+                .applicationLink("https://www.innovatecorp.com/internship/apply")
+                .description("This internship offers hands-on experience in AI research and development.")
+                .status(ApplicationStatus.OPEN_FOR_APPLICATION)
+                .company(null)
+                .build();
+    }
+
+    public static InternshipEntity createTestInternshipEntityB() {
+        return InternshipEntity.builder()
+                .id(2L) 
+                .name("Software Development Internship")
+                .applicationLink("https://www.innovatecorp.com/software-internship/apply")
+                .description("Join us to develop innovative software solutions with cutting-edge technologies.")
+                .status(ApplicationStatus.CANCELED) 
+                .company(null)
+                .build();
+    }
+    
+    public static InternshipDto createTestInternshipDtoA() {
+        return InternshipDto.builder()
+                .id(1L) 
+                .name("AI Research Internship")
+                .applicationLink("https://www.innovatecorp.com/internship/apply")
+                .description("This internship offers hands-on experience in AI research and development.")
+                .status(ApplicationStatus.OPEN_FOR_APPLICATION)
+                .company(null)
+                .build();
+    }
+
+    public static InternshipDto createTestInternshipDtoB() {
+        return InternshipDto.builder()
+                .id(2L)  
+                .name("Software Development Internship")
+                .applicationLink("https://www.innovatecorp.com/software-internship/apply")
+                .description("Join us to develop innovative software solutions with cutting-edge technologies.")
+                .status(ApplicationStatus.CANCELED) 
+                .company(null)
+                .build();
+    }
 
 }
