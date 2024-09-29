@@ -258,5 +258,18 @@ public class InternshipControllerIntegrationTests {
         );
     }
 
+    @Test
+    public void testThatDeleteInternshipReturnsHttpStatus204ForExistingInternship() throws Exception {
+        InternshipEntity internshipEntity = TestDataUtil.createTestInternshipEntityA();
+        InternshipEntity savedInternshipEntity = internshipService.save(internshipEntity);
+        mockMvc.perform(
+            MockMvcRequestBuilders.delete("/api/interns/delete/" + savedInternshipEntity.getId())
+            .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+            MockMvcResultMatchers.status().isNoContent()
+        );
+    }
+
+    
 
 }
