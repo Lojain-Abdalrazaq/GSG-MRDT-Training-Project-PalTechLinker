@@ -81,4 +81,14 @@ public class InternshipControllerIntegrationTests {
         );
     }
 
+    @Test
+    public void testThatGetInternshipReturnsHttpStatus404WhenNoInternshipExists() throws Exception {
+        mockMvc.perform(
+            MockMvcRequestBuilders.get("/api/interns/read/1")
+                    .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+            MockMvcResultMatchers.status().isNotFound()
+        );
+    }
+
 }
