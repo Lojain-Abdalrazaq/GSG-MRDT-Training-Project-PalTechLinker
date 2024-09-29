@@ -205,11 +205,10 @@ public class InternshipControllerIntegrationTests {
     @Test
     public void testThatPartialUpdateInternshipReturnsHttpStatus200WhenInternshipExists() throws Exception {
         InternshipEntity internshipEntityToBeUpdated = TestDataUtil.createTestInternshipEntityA();
-        InternshipEntity internshipEntityWithNewData = TestDataUtil.createTestInternshipEntityB();
-
         internshipService.save(internshipEntityToBeUpdated);
 
-        String internJson = objectMapper.writeValueAsString(internshipEntityWithNewData);
+        internshipEntityToBeUpdated.setName("UPDATED");
+        String internJson = objectMapper.writeValueAsString(internshipEntityToBeUpdated);
 
         mockMvc.perform(
             MockMvcRequestBuilders.patch("/api/interns/update/partial/" + internshipEntityToBeUpdated.getId())
