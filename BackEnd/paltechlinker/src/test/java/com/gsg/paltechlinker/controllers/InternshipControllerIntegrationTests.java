@@ -111,4 +111,14 @@ public class InternshipControllerIntegrationTests {
         );
     }
 
+    @Test
+    public void testThatListInternshipReturnsHttpStatus200() throws Exception {
+        mockMvc.perform(
+            MockMvcRequestBuilders.get("/api/interns/read/all")
+                    .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+            MockMvcResultMatchers.status().isOk()
+        );
+    }
+
 }
