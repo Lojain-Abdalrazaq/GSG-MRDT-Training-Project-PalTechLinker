@@ -1,11 +1,13 @@
 package com.gsg.paltechlinker.mappers.impl;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Component;
 
 import com.gsg.paltechlinker.domain.dto.InternshipDto;
 import com.gsg.paltechlinker.domain.entities.InternshipEntity;
 import com.gsg.paltechlinker.mappers.Mapper;
 
+@Component
 public class InternshipMapperImpl implements Mapper<InternshipEntity, InternshipDto> {
 
     private ModelMapper modelMapper;

@@ -43,6 +43,6 @@ public class InternshipEntity {
     private ApplicationStatus status;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "company_id", nullable = false)
+    @JoinColumn(name = "company_id")
     private CompanyEntity company;
 }
