@@ -1,23 +1,23 @@
 import React from "react";
-import { Card, CardContent, Avatar, Typography } from "@mui/material";
+import { Card, CardContent, Avatar, Typography, Box } from "@mui/material";
 import Colors from "../../../Assets/Colors/Colors";
+import CustomButton from "../../../CommonComponents/CustomButton";
 
-const CompanyCard = ({ company, index, onClick }) => {
+const CompanyCard = ({ company, index }) => {
   return (
     <Card
-      onClick={onClick} // تم إضافة onClick هنا
       sx={{
         display: "flex",
         alignItems: "center",
-        padding: "1rem",
+        padding: "1.5rem", 
         backgroundColor: index % 2 === 0 ? Colors.gray : Colors.secondary,
-        boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-        borderRadius: "15px",
-        width: 380,
-        height: 150,
+        boxShadow: "0 6px 15px rgba(0,0,0,0.1)",
+        borderRadius: "20px", 
+        width: 450, 
+        height: 180, 
         transition: "transform 0.3s ease, box-shadow 0.3s ease",
         cursor: "pointer",
-        "&:hover": {
+        "&": {
           transform: "translateY(-5px)",
           boxShadow: "0 8px 16px rgba(0,0,0,0.2)",
         },
@@ -26,7 +26,7 @@ const CompanyCard = ({ company, index, onClick }) => {
       <Avatar
         src={company.logo}
         alt={company.name}
-        sx={{ width: 80, height: 80 }}
+        sx={{ width: 100, height: 100 }} 
       />
       <CardContent
         sx={{
@@ -36,6 +36,20 @@ const CompanyCard = ({ company, index, onClick }) => {
           flexGrow: 1,
         }}
       >
+         <Box
+          sx={{
+            display: "inline-block",
+            padding: "0px 20px",
+            borderRadius: "15px",
+            fontFamily: "'Cairo', sans-serif",
+            fontWeight: "bold",
+            right: 5,
+            position: "absolute",
+           
+          }}
+        >
+          {company.status}
+        </Box>
         <Typography
           variant="h6"
           sx={{
@@ -56,10 +70,16 @@ const CompanyCard = ({ company, index, onClick }) => {
         >
           {company.address}
         </Typography>
+        {/* أزرار تعديل وحذف */}
+        <Box sx={{ display: "flex", justifyContent: "space-between", marginTop: 1 }}>
+          <CustomButton text="edit" fullWidth={false} />
+          <CustomButton text="delete" fullWidth={false} />
+        </Box>
       </CardContent>
     </Card>
+        
+        
   );
 };
 
 export default CompanyCard;
-

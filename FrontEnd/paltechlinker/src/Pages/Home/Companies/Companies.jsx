@@ -46,9 +46,12 @@ const companies = [
 
 const Companies = () => {
   const navigate = useNavigate();
-
+  const handleCardClick = (id) => {
+   
+    navigate(`/company/${id}`);
+  };
   const handleShowMore = () => {
-    navigate("/companies");
+    navigate(`/company`);
   };
 
   return (
@@ -101,7 +104,7 @@ const Companies = () => {
       <Grid container spacing={4} justifyContent="center">
         {companies.slice(0, 6).map((company, index) => (
           <Grid item xs={12} sm={6} md={4} key={company.id}>
-            <CompanyCard company={company} index={index} />
+            <CompanyCard company={company} index={index} onClick={() => handleCardClick(company.id)} />
           </Grid>
         ))}
       </Grid>
