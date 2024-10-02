@@ -14,7 +14,9 @@ const Companies = () => {
   useEffect(() => {
     const fetchCompanies = async () => {
       try {
-        const response = await axios.get("http://localhost:8081/api/companies/create");
+        const response = await axios.get(
+          "http://localhost:8081/api/companies/read/all"
+        );
         setCompanies(response.data.content);
       } catch (error) {
         console.error("Error fetching companies:", error);
