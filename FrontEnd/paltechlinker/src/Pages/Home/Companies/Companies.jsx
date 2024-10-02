@@ -76,7 +76,12 @@ const Companies = () => {
       </Box>
 
       {/* Company Cards */}
-      <Grid container spacing={4} justifyContent="center">
+      <Grid
+        container
+        spacing={4}
+        justifyContent="center"
+        sx={{ paddingInline: 5 }}
+      >
         {companies.slice(0, 6).map((company, index) => (
           <Grid item xs={12} sm={6} md={4} key={company.id}>
             <CompanyCard
