@@ -11,6 +11,8 @@ import CompaniesPage from "./Pages/Companies/CompaniesPage";
 import Comapny from "./Pages/CompanyProfile/Comapny";
 import Add from "./Pages/AddInternShip/AddInternShip";
 import Edit from "./Pages/EditInternShip/EditInternShip";
+
+
 function App() {
   return (
     <Router>
