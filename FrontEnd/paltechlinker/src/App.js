@@ -11,6 +11,8 @@ import CompaniesPage from "./Pages/Companies/CompaniesPage";
 import Comapny from "./Pages/CompanyProfile/Comapny";
 import Add from "./Pages/AddInternShip/AddInternShip";
 import Edit from "./Pages/EditInternShip/EditInternShip";
+
+
 function App() {
   return (
     <Router>
@@ -21,7 +23,7 @@ function App() {
           <Route path="/Company/:id" element={<Comapny/>} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
-          
+
           <Route path="/companies" element={<CompaniesPage />} />
           <Route path="/AddInternShip" element={<Add />} />
           <Route path="/EditInternShip" element={<Edit />} />
