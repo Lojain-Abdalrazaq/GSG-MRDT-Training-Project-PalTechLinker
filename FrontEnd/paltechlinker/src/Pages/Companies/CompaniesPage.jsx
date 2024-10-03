@@ -22,6 +22,8 @@ const CompaniesPage = () => {
   const companiesPerPage = 12; // Set 12 companies per page
   const navigate = useNavigate();
 
+  
+
   // Fetch companies from the API
   useEffect(() => {
     const fetchCompanies = async () => {
