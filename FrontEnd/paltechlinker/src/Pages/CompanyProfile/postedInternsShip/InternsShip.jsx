@@ -1,25 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Box, Grid, Typography, Container } from "@mui/material";
-import axios from "axios";
 import Colors from "../../../Assets/Colors/Colors";
-import { useNavigate } from "react-router-dom";
-import CompanyCard from "./CompanyCard";
+import CompanyCard from "./PostesInternshipCadr";
 import CustomButton from "../../../CommonComponents/CustomButton";
+import  { useEffect, useState } from 'react';
 
-const Companies = () => {
-  const [companies, setCompanies] = useState([]);
-  const navigate = useNavigate();
-  const handleCardClick = (id) => {
-   
-    navigate(`/company/${id}`);
-  };
-  const handleShowMore = () => {
-    navigate(`/company`);
-  };
 
+
+const CompaniesIntern = (companyId) => {
+  const [companies, setCompanies] = useState([]); 
+  useEffect(() => {
+    fetch(`/company/${companyId}`)
+          .then(response => response.json())
+      .then(data => setCompanies(data))
+      .catch(error => console.error('Error fetching companies:', error));
+  }, []);
   return (
     <Container
-      maxWidth="100%"
+      maxWidth="lg"
       sx={{
         backgroundColor: Colors.background,
         display: "flex",
@@ -66,25 +64,24 @@ const Companies = () => {
       {/* Company Cards */}
       <Grid
         container
-        spacing={4}
+        spacing={6} 
         justifyContent="center"
-        sx={{ paddingInline: 5 }}
       >
-        {companies.slice(0, 6).map((company, index) => (
-          <Grid item xs={12} sm={6} md={4} key={company.id}>
-            <CompanyCard company={company} index={index} onClick={() => handleCardClick(company.id)} />
+        {companies.map((company, index) => (
+          <Grid item xs={12} sm={6} md={5} lg={5} key={company.id}
+            sx={{ display: "flex", justifyContent: "center" }}
+          >
+            <CompanyCard company={company} index={index} />
           </Grid>
         ))}
       </Grid>
 
       {/* Show More Button */}
-      <CustomButton
-        text="Show More"
-        onClick={handleShowMore}
-        fullWidth={false}
-      />
+      <Box mt={4}>
+        <CustomButton text="Show More" fullWidth={false} />
+      </Box>
     </Container>
   );
 };
 
-export default Companies;
+export default CompaniesIntern;

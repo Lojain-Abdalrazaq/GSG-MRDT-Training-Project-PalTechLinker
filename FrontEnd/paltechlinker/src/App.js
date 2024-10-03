@@ -8,6 +8,9 @@ import Login from "./Pages/Login/Login";
 import Home from "./Pages/Home/Home";
 import CompaniesPage from "./Pages/Companies/CompaniesPage";
 
+import Comapny from "./Pages/CompanyProfile/Comapny";
+import Add from "./Pages/AddInternShip/AddInternShip";
+import Edit from "./Pages/EditInternShip/EditInternShip";
 function App() {
   return (
     <Router>
@@ -15,9 +18,12 @@ function App() {
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/Company/:id" element={<Comapny/>} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
           <Route path="/companies" element={<CompaniesPage />} />
+          <Route path="/AddInternShip" element={<Add />} />
+          <Route path="/EditInternShip" element={<Edit />} />
         </Routes>
         <Footer />
       </div>
