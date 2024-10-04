@@ -1,74 +1,71 @@
-import React from "react";
-import { Grid, Container, Typography, Box } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import {
+  Grid,
+  Container,
+  Typography,
+  Box,
+  CircularProgress,
+} from "@mui/material";
 import InternshipCard from "./InternshipCard";
 import Colors from "../../../Assets/Colors/Colors";
 import { useNavigate } from "react-router-dom";
 import CustomButton from "../../../CommonComponents/CustomButton";
-
-const internships = [
-  {
-    id: 1,
-    image: "",
-    title: "Frontend Developer Internship",
-    company: "ITG Software, Inc.",
-    type: "Onsite",
-    status: "open",
-    description: "Work as a frontend developer intern focusing on React.js.",
-  },
-  {
-    id: 2,
-    image: "",
-    title: "Backend Developer Internship",
-    company: "Foothill Technology Solutions",
-    type: "Remotely",
-    status: "closed",
-    description:
-      "Join our team to assist with backend development using Node.js.",
-  },
-  {
-    id: 3,
-    image: "",
-    title: "UI/UX Designer Internship",
-    company: "Fratello Software House",
-    type: "Hybrid",
-    status: "in progress",
-    description: "Contribute to design systems and UI/UX components.",
-  },
-  {
-    id: 4,
-    image: "",
-    title: "UI/UX Designer Internship",
-    company: "Fratello Software House",
-    type: "Hybrid",
-    status: "in progress",
-    description: "Contribute to design systems and UI/UX components.",
-  },
-  {
-    id: 5,
-    image: "",
-    title: "UI/UX Designer Internship",
-    company: "Fratello Software House",
-    type: "Hybrid",
-    status: "in progress",
-    description: "Contribute to design systems and UI/UX components.",
-  },
-  {
-    id: 6,
-    image: "",
-    title: "UI/UX Designer Internship",
-    company: "Fratello Software House",
-    type: "Hybrid",
-    status: "in progress",
-    description: "Contribute to design systems and UI/UX components.",
-  },
-];
+import axios from "axios";
 
 const Internships = () => {
+  const [internships, setInternships] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
+  // Fetch internships data from the API
+  useEffect(() => {
+    const fetchInternships = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:8081/api/interns/read/all"
+        );
+        setInternships(response.data.content);
+      } catch (error) {
+        setError("Failed to load internships.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchInternships();
+  }, []);
+
   const handleShowMore = () => {
-    navigate("/companies");
+    navigate("/internships");
   };
+
+  const handleCardClick = (id) => {
+    navigate(`/interns/read/${id}`);
+  };
+
+  if (loading) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  if (error) {
+    return (
+      <Typography variant="h6" sx={{ color: "red", textAlign: "center" }}>
+        {error}
+      </Typography>
+    );
+  }
 
   return (
     <Container
@@ -116,7 +113,10 @@ const Internships = () => {
       <Grid container spacing={4} justifyContent="center">
         {internships.map((internship) => (
           <Grid item xs={12} sm={6} md={4} key={internship.id}>
-            <InternshipCard internship={internship} />
+            <InternshipCard
+              internship={internship}
+              onClick={() => handleCardClick(internship.id)}
+            />
           </Grid>
         ))}
       </Grid>

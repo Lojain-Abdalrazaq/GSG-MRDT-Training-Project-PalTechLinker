@@ -3,34 +3,77 @@ import { Card, CardContent, Typography, Avatar, Box } from "@mui/material";
 import Colors from "../../../Assets/Colors/Colors";
 import CustomButton from "../../../CommonComponents/CustomButton";
 
-const InternshipCard = ({ internship }) => {
+const InternshipCard = ({ internship, onClick }) => {
   const getStatusStyles = (status) => {
     switch (status) {
-      case "open":
+      case "OPEN_FOR_APPLICATION":
         return {
+          label: "Open for Application",
           color: "green",
           backgroundColor: "lightgreen",
           border: "1px solid green",
         };
-      case "closed":
+      case "CLOSED_FOR_APPLICATION":
         return {
+          label: "Closed for Application",
           color: "red",
           backgroundColor: "lightcoral",
           border: "1px solid red",
         };
-      case "in progress":
+      case "UNDER_REVIEW":
         return {
+          label: "Under Review",
           color: "orange",
           backgroundColor: "lightyellow",
           border: "1px solid orange",
         };
+      case "INTERVIEW_STAGE":
+        return {
+          label: "Interview Stage",
+          color: "blue",
+          backgroundColor: "lightblue",
+          border: "1px solid blue",
+        };
+      case "OFFER_SENT":
+        return {
+          label: "Offer Sent",
+          color: "purple",
+          backgroundColor: "lavender",
+          border: "1px solid purple",
+        };
+      case "CANCELED":
+        return {
+          label: "Canceled",
+          color: "grey",
+          backgroundColor: "lightgrey",
+          border: "1px solid grey",
+        };
+      case "IN_PROGRESS":
+        return {
+          label: "In Progress",
+          color: "orange",
+          backgroundColor: "lightyellow",
+          border: "1px solid orange",
+        };
+      case "COMPLETED":
+        return {
+          label: "Completed",
+          color: "green",
+          backgroundColor: "lightgreen",
+          border: "1px solid green",
+        };
       default:
-        return { color: "black", backgroundColor: "lightgray" };
+        return {
+          label: "Unknown",
+          color: "black",
+          backgroundColor: "lightgray",
+        };
     }
   };
 
   return (
     <Card
+      onClick={onClick}
       sx={{
         display: "flex",
         flexDirection: { xs: "column", sm: "row" },
@@ -47,8 +90,8 @@ const InternshipCard = ({ internship }) => {
     >
       {/* Company Logo */}
       <Avatar
-        src={internship.image}
-        alt={internship.title}
+        src={internship.company.imageUrl}
+        alt={internship.company.name}
         sx={{ width: 100, height: 100, marginRight: "1.5rem" }}
       />
 
@@ -62,11 +105,11 @@ const InternshipCard = ({ internship }) => {
             fontWeight: "bold",
           }}
         >
-          {internship.title}
+          {internship.name}
         </Typography>
 
         <Typography variant="body2" sx={{ fontFamily: "'Cairo', sans-serif" }}>
-          {internship.company}
+          {internship.company.name}
         </Typography>
 
         <Typography
@@ -77,7 +120,7 @@ const InternshipCard = ({ internship }) => {
             fontWeight: "bold",
           }}
         >
-          {internship.type}
+          {internship.status}
         </Typography>
 
         <Box
@@ -92,10 +135,9 @@ const InternshipCard = ({ internship }) => {
             ...getStatusStyles(internship.status),
           }}
         >
-          {internship.status}
+          {getStatusStyles(internship.status).label}
         </Box>
 
-        {/* Internship Description */}
         <Typography
           variant="body2"
           sx={{
@@ -114,7 +156,10 @@ const InternshipCard = ({ internship }) => {
             marginTop: "1.5rem",
           }}
         >
-          <CustomButton text="Apply Now" onClick={() => console.log("Apply")} />
+          <CustomButton
+            text="Apply Now"
+            onClick={() => window.open(internship.applicationLink, "_blank")}
+          />
         </Box>
       </CardContent>
     </Card>

@@ -66,6 +66,10 @@ const CompaniesPage = () => {
     indexOfLastCompany
   );
 
+  const handleCardClick = (id) => {
+    navigate(`/companies/read/${id}`);
+  };
+
   return (
     <Container
       maxWidth="100%"
@@ -162,6 +166,7 @@ const CompaniesPage = () => {
                   address: company.address,
                 }}
                 index={index}
+                onClick={() => handleCardClick(company.id)}
               />
             </Grid>
           ))

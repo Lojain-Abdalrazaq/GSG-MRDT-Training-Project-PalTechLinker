@@ -5,7 +5,7 @@ import Colors from "../../../Assets/Colors/Colors";
 const CompanyCard = ({ company, index, onClick }) => {
   return (
     <Card
-      onClick={onClick} // تم إضافة onClick هنا
+      onClick={onClick} 
       sx={{
         display: "flex",
         alignItems: "center",
