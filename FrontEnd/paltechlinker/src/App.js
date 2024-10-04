@@ -7,10 +7,10 @@ import Footer from "./CommonComponents/Footer";
 import Login from "./Pages/Login/Login";
 import Home from "./Pages/Home/Home";
 import CompaniesPage from "./Pages/Companies/CompaniesPage";
-
 import Comapny from "./Pages/CompanyProfile/Comapny";
 import Add from "./Pages/AddInternShip/AddInternShip";
 import Edit from "./Pages/EditInternShip/EditInternShip";
+import InternshipsPage from "./Pages/Internships/InternshipsPage";
 
 
 function App() {
@@ -24,6 +24,7 @@ function App() {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
           <Route path="/companies" element={<CompaniesPage />} />
+          <Route path="/internships" element={<InternshipsPage />} />
           <Route path="/AddInternShip" element={<Add />} />
           <Route path="/EditInternShip" element={<Edit />} />
         </Routes>
