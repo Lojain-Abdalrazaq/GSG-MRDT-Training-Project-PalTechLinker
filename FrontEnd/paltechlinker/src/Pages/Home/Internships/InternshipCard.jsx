@@ -3,7 +3,7 @@ import { Card, CardContent, Typography, Avatar, Box } from "@mui/material";
 import Colors from "../../../Assets/Colors/Colors";
 import CustomButton from "../../../CommonComponents/CustomButton";
 
-const InternshipCard = ({ internship }) => {
+const InternshipCard = ({ internship, onClick }) => {
   const getStatusStyles = (status) => {
     switch (status) {
       case "OPEN_FOR_APPLICATION":
@@ -73,6 +73,7 @@ const InternshipCard = ({ internship }) => {
 
   return (
     <Card
+      onClick={onClick}
       sx={{
         display: "flex",
         flexDirection: { xs: "column", sm: "row" },

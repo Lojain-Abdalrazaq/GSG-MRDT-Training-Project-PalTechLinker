@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Grid, Container, Typography, Box, CircularProgress } from "@mui/material";
+import {
+  Grid,
+  Container,
+  Typography,
+  Box,
+  CircularProgress,
+} from "@mui/material";
 import InternshipCard from "./InternshipCard";
 import Colors from "../../../Assets/Colors/Colors";
 import { useNavigate } from "react-router-dom";
@@ -16,8 +22,10 @@ const Internships = () => {
   useEffect(() => {
     const fetchInternships = async () => {
       try {
-        const response = await axios.get("http://localhost:8081/api/interns/read/all");
-        setInternships(response.data.content); // Assuming the data is in 'content'
+        const response = await axios.get(
+          "http://localhost:8081/api/interns/read/all"
+        );
+        setInternships(response.data.content);
       } catch (error) {
         setError("Failed to load internships.");
       } finally {
@@ -29,7 +37,11 @@ const Internships = () => {
   }, []);
 
   const handleShowMore = () => {
-    navigate("/companies");
+    navigate("/internships");
+  };
+
+  const handleCardClick = (id) => {
+    navigate(`/interns/read/${id}`);
   };
 
   if (loading) {
@@ -101,7 +113,10 @@ const Internships = () => {
       <Grid container spacing={4} justifyContent="center">
         {internships.map((internship) => (
           <Grid item xs={12} sm={6} md={4} key={internship.id}>
-            <InternshipCard internship={internship} />
+            <InternshipCard
+              internship={internship}
+              onClick={() => handleCardClick(internship.id)}
+            />
           </Grid>
         ))}
       </Grid>
