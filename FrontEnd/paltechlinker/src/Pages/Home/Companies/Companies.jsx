@@ -26,9 +26,11 @@ const Companies = () => {
   }, []);
 
   const handleCardClick = (id) => {
-   
-    navigate(`/companies/read/${id}`);
+    navigate(`/company/${id}`, {
+      state: { company_id: id },
+    });
   };
+
   const handleShowMore = () => {
     navigate(`/companies`);
   };
@@ -88,7 +90,11 @@ const Companies = () => {
       >
         {companies.slice(0, 6).map((company, index) => (
           <Grid item xs={12} sm={6} md={4} key={company.id}>
-            <CompanyCard company={company} index={index} onClick={() => handleCardClick(company.id)} />
+            <CompanyCard
+              company={company}
+              index={index}
+              onClick={() => handleCardClick(company.id)}
+            />
           </Grid>
         ))}
       </Grid>

@@ -2,15 +2,19 @@ import React from "react";
 import Profile from "./Profile";
 import CompaniesIntern from "./postedInternsShip/InternsShip";
 import AddInterns from "./postedInternsShip/addInterns";
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from "react-router-dom";
+
 const Comapny = () => {
-  const { id } = useParams();
+  const location = useLocation();
+  const id = location.state?.company_id;
+  console.log(id);
+
   return (
     <>
-      <Profile companyId={id}/>
-      <CompaniesIntern companyId={id}/>
-      <AddInterns/>
-      </>
+      <Profile companyId={id} />
+      <CompaniesIntern companyId={id} />
+      <AddInterns />
+    </>
   );
 };
 
