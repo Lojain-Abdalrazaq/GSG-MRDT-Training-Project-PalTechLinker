@@ -8,6 +8,8 @@ import Login from "./Pages/Login/Login";
 import Home from "./Pages/Home/Home";
 import CompaniesPage from "./Pages/Companies/CompaniesPage";
 
+
+
 function App() {
   return (
     <Router>
