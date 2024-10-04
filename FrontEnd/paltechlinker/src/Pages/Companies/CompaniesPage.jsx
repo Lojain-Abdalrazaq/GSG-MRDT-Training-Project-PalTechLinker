@@ -22,8 +22,6 @@ const CompaniesPage = () => {
   const companiesPerPage = 12; // Set 12 companies per page
   const navigate = useNavigate();
 
-  
-
   // Fetch companies from the API
   useEffect(() => {
     const fetchCompanies = async () => {
@@ -67,6 +65,10 @@ const CompaniesPage = () => {
     indexOfFirstCompany,
     indexOfLastCompany
   );
+
+  const handleCardClick = (id) => {
+    navigate(`/companies/read/${id}`);
+  };
 
   return (
     <Container
@@ -164,6 +166,7 @@ const CompaniesPage = () => {
                   address: company.address,
                 }}
                 index={index}
+                onClick={() => handleCardClick(company.id)}
               />
             </Grid>
           ))
