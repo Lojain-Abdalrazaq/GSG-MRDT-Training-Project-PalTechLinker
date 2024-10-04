@@ -1,5 +1,6 @@
 package com.gsg.paltechlinker.services;
 
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,4 +21,5 @@ public interface InternshipService {
 
     boolean isExists(Long id);
 
+    List<InternshipEntity> findByCompanyId(Long companyId);
 }
