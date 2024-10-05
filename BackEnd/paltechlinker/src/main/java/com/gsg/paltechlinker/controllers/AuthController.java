@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -25,17 +27,24 @@ public class AuthController {
 
     // Login
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginDto loginDto, HttpServletRequest request) {
+    public ResponseEntity<Map<String, Object>> login(@RequestBody LoginDto loginDto, HttpServletRequest request) {
         // Authenticate the company using the provided email and password
         Optional<CompanyEntity> companyEntity = companyService.authenticate(loginDto.getEmail(), loginDto.getPassword());
-
+    
         if (companyEntity.isPresent()) {
             // Save the company ID in the session
             request.getSession().setAttribute("company_id", companyEntity.get().getId());
-            // Return a success message
-            return new ResponseEntity<>("Login successful.", HttpStatus.OK); // 200 OK
+    
+            // Return company_id and success message
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", "Login successful");
+            response.put("company_id", companyEntity.get().getId());
+    
+            return new ResponseEntity<>(response, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>("Invalid email or password.", HttpStatus.UNAUTHORIZED); // 401 Unauthorized
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("message", "Invalid email or password");
+            return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED); // 401 Unauthorized
         }
     }
 
