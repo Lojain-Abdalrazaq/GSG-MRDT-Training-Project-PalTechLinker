@@ -12,15 +12,47 @@ import { Formik, Form, Field } from "formik";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import * as Yup from "yup";
+import axios from "axios";
 import Colors from "../../Assets/Colors/Colors";
 import Image from "../../Assets/Images/login.png";
 import CustomButton from "../../CommonComponents/CustomButton";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async (values) => {
-    // Handle login logic here
+    try {
+      const response = await axios.post(
+        "http://localhost:8081/api/auth/login",
+        {
+          email: values.email,
+          password: values.password,
+        }
+      );
+
+      // Handle success response
+      if (response.status === 200) {
+        const { company_id, message } = response.data;
+        console.log("Login successful, Company ID:", company_id);
+
+        //store the company_id in local storage
+        localStorage.setItem("company_id", company_id);
+
+        navigate(`/company/${company_id}`, {
+          state: { company_id: company_id },
+        });
+      }
+    } catch (error) {
+      // Handle error response (e.g., 401 Unauthorized)
+      if (error.response && error.response.status === 401) {
+        setErrorMessage("Invalid email or password");
+      } else {
+        setErrorMessage("An error occurred. Please try again.");
+      }
+    }
   };
 
   return (
@@ -49,7 +81,6 @@ const Login = () => {
           borderRadius: "8px",
         }}
       >
-        {/* Left Side: Login Form */}
         <Box
           sx={{
             width: { xs: "100%", md: "50%" },
@@ -94,6 +125,15 @@ const Login = () => {
               </Link>
               .
             </Typography>
+            {errorMessage && (
+              <Typography
+                variant="body2"
+                color="error"
+                style={{ marginBottom: "1rem", textAlign: "center" }}
+              >
+                {errorMessage}
+              </Typography>
+            )}
             <Formik
               initialValues={{
                 email: "",
@@ -157,17 +197,13 @@ const Login = () => {
                     </IconButton>
                   </div>
 
-                  <CustomButton
-                    text="Log In"
-                    fullWidth={true} 
-                  />
+                  <CustomButton text="Log In" fullWidth={true} type="submit" />
                 </Form>
               )}
             </Formik>
           </Paper>
         </Box>
 
-        {/* Right Side: Image */}
         <Box
           sx={{
             width: { xs: "100%", md: "50%" },
