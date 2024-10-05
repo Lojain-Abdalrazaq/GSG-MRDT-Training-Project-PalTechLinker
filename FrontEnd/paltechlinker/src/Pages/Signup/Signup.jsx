@@ -17,13 +17,51 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import * as Yup from "yup";
 import Colors from "../../Assets/Colors/Colors";
 import CustomButton from "../../CommonComponents/CustomButton";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const navigate = useNavigate();
+  const [signUpMessage, setSignUpMessage] = useState("");
 
   const handleSubmit = async (values) => {
-    // Handle submit logic here
+    const signupData = {
+      name: values.companyName,
+      email: values.companyEmail,
+      password: values.password,
+      address: values.address,
+      description: values.description,
+      websiteLink: values.website,
+      phoneNumber: values.phone,
+      contactEmail: values.contactEmail,
+      imageUrl: values.avatar
+        ? URL.createObjectURL(values.avatar)
+        : "http://example.com/updatedimage.png",
+      numberOfEmployees: 100,
+      socialAccount: values.linkedIn,
+    };
+
+    try {
+      const response = await axios.post(
+        "http://localhost:8081/api/companies/signup",
+        signupData
+      );
+
+      if (response.status === 201) {
+        setSignUpMessage(response.data);
+        console.log("Sign Up successful");
+        navigate("/login");
+      } else {
+        setSignUpMessage(
+          response.data|| "Signup failed. Please try again."
+        );
+      }
+    } catch (error) {
+      console.error("Error signing up:", error);
+      setSignUpMessage("Signup failed. Please try again.");
+    }
   };
 
   return (
@@ -70,6 +108,17 @@ const Register = () => {
               >
                 Register Account
               </Typography>
+
+              {signUpMessage && (
+                <Typography
+                  variant="body1"
+                  color="error"
+                  style={{ marginTop: "1rem" }}
+                >
+                  {signUpMessage}
+                </Typography>
+              )}
+
               <Typography
                 variant="body2"
                 style={{
@@ -101,6 +150,7 @@ const Register = () => {
                   description: "",
                   linkedIn: "",
                   avatar: null,
+                  numberOfEmployees: "",
                 }}
                 validationSchema={Yup.object().shape({
                   companyName: Yup.string().required(
@@ -128,6 +178,10 @@ const Register = () => {
                     .url("Invalid LinkedIn URL")
                     .required("LinkedIn is required"),
                   avatar: Yup.mixed().required("Company Avatar is required"),
+                  numberOfEmployees: Yup.number()
+                    .required("Number of Employees is required")
+                    .positive("Must be a positive number")
+                    .integer("Must be an integer"),
                 })}
                 onSubmit={handleSubmit}
               >
@@ -210,6 +264,28 @@ const Register = () => {
                       label="Phone Number"
                       error={touched.phone && !!errors.phone}
                       helperText={touched.phone && errors.phone}
+                      inputProps={{
+                        style: { fontFamily: "'Cairo', sans-serif" },
+                      }}
+                      InputLabelProps={{
+                        style: { fontFamily: "'Cairo', sans-serif" },
+                      }}
+                    />
+
+                    <Field
+                      as={TextField}
+                      variant="outlined"
+                      margin="normal"
+                      fullWidth
+                      name="numberOfEmployees"
+                      label="Number of Employees"
+                      type="number"
+                      error={
+                        touched.numberOfEmployees && !!errors.numberOfEmployees
+                      }
+                      helperText={
+                        touched.numberOfEmployees && errors.numberOfEmployees
+                      }
                       inputProps={{
                         style: { fontFamily: "'Cairo', sans-serif" },
                       }}
@@ -392,7 +468,8 @@ const Register = () => {
 
                     <CustomButton
                       text="Register"
-                      fullWidth={true} 
+                      fullWidth={true}
+                      type="submit"
                     />
                   </Form>
                 )}
