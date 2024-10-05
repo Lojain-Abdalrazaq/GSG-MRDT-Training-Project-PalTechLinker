@@ -28,12 +28,15 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     try {
-      await axios.post("http://localhost:8081/api/auth/logout", {}, {
-        withCredentials: true, // Include credentials to ensure the session is valid
-      });
+      await axios.post(
+        "http://localhost:8081/api/auth/logout",
+        {},
+        {
+          withCredentials: true, // Include credentials to ensure the session is valid
+        }
+      );
       localStorage.removeItem("company_id");
       setIsLoggedIn(false);
-      window.location.reload();
       navigate("/login");
     } catch (error) {
       console.error("Logout failed:", error);
@@ -49,6 +52,12 @@ const Navbar = () => {
           {
             title: "Profile",
             link: `/company/${localStorage.getItem("company_id")}`,
+            onClick: (e) => {
+              e.preventDefault(); // Prevent default anchor behavior
+              navigate(`/company/${localStorage.getItem("company_id")}`, {
+                state: { company_id: localStorage.getItem("company_id") },
+              });
+            },
           },
           { title: "Log Out", link: "/login", onClick: handleLogout },
         ]
