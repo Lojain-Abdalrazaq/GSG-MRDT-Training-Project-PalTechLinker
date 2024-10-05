@@ -13,7 +13,6 @@ const Comapny = () => {
     <>
       <Profile companyId={id} />
       <CompaniesIntern companyId={id} />
-      <AddInterns />
     </>
   );
 };

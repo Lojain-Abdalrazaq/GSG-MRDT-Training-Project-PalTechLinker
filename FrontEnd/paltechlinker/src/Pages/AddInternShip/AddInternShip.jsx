@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Container,
   TextField,
@@ -12,7 +12,8 @@ import * as Yup from "yup";
 import Colors from "../../Assets/Colors/Colors";
 import Image from "../../Assets/Images/login.png";
 import CustomButton from "../../CommonComponents/CustomButton";
-
+import axios from 'axios';
+import { useLocation } from "react-router-dom";
 
 const InternshipFormSchema = Yup.object().shape({
   internshipName: Yup.string().required("Internship name is required"),
@@ -20,17 +21,68 @@ const InternshipFormSchema = Yup.object().shape({
   status: Yup.string().required("Status is required"),
   description: Yup.string().required("Internship description is required"),
   ApplicationLink: Yup.string()
-  .url("Invalid URL format") 
-  .required("Application link is required"), 
-
+    .url("Invalid URL format") 
+    .required("Application link is required"), 
 });
 
 const Add = () => {
+  const [statuses, setStatuses] = useState([]);
+  const [types, setTypes] = useState([]);
+  const location = useLocation();
+  const id = location.state?.company_id;
+
   const initialValues = {
     internshipName: '',
     type: '',
-    status: 'green', 
+    status: '',
     description: '',
+    ApplicationLink: '',
+  };
+
+  // Fetch internship statuses and types
+  useEffect(() => {
+    const fetchStatuses = async () => {
+      try {
+        const response = await axios.get("http://localhost:8081/api/interns/application-status");
+        setStatuses(response.data);
+      } catch (error) {
+        console.error("Error fetching statuses:", error);
+      }
+    };
+
+    const fetchTypes = async () => {
+      try {
+        const response = await axios.get("http://localhost:8081/api/interns/internship-type");
+        setTypes(response.data);
+      } catch (error) {
+        console.error("Error fetching types:", error);
+      }
+    };
+
+    fetchStatuses();
+    fetchTypes();
+  }, []);
+
+  const handleSubmit = async (values) => {
+    const internshipData = {
+      name: values.internshipName,
+      applicationLink: values.ApplicationLink,
+      description: values.description,
+      status: values.status,
+      type: values.type,
+      company: {
+        id: id 
+      }
+    };
+
+    try {
+      const response = await axios.post("http://localhost:8081/api/interns/create", internshipData);
+      if (response.status === 201) {
+        console.log("Internship added successfully!");
+      }
+    } catch (error) {
+      console.error("Error adding internship:", error);
+    }
   };
 
   return (
@@ -84,15 +136,13 @@ const Add = () => {
               fontFamily={"'Cairo', sans-serif"}
               align="center"
             >
-              Add InternShip
+              Add Internship
             </Typography>
 
             <Formik
               initialValues={initialValues}
               validationSchema={InternshipFormSchema}
-              onSubmit={(values) => {
-                console.log(values);
-              }}
+              onSubmit={handleSubmit}
             >
               {({ errors, touched, handleChange, values }) => (
                 <Form>
@@ -118,10 +168,11 @@ const Add = () => {
                     error={touched.type && Boolean(errors.type)}
                     helperText={touched.type && errors.type}
                   >
-                    <MenuItem value="on-site">On-Site</MenuItem>
-                    <MenuItem value="remotely">Remotely</MenuItem>
-                    <MenuItem value="hybrid">Hybrid</MenuItem>
+                    {types.map((type, index) => (
+                      <MenuItem key={index} value={type}>{type}</MenuItem>
+                    ))}
                   </Field>
+
                   <Field
                     as={TextField}
                     label="Application Link"
@@ -131,6 +182,7 @@ const Add = () => {
                     error={touched.ApplicationLink && Boolean(errors.ApplicationLink)}
                     helperText={touched.ApplicationLink && errors.ApplicationLink}
                   />
+                  
                   <Field
                     as={TextField}
                     label="Status"
@@ -140,14 +192,12 @@ const Add = () => {
                     margin="normal"
                     value={values.status}
                     onChange={handleChange}
-                    style={{
-                      backgroundColor: values.status === 'green' ? 'lightgreen' : 'lightcoral',
-                    }}
                     error={touched.status && Boolean(errors.status)}
                     helperText={touched.status && errors.status}
                   >
-                    <MenuItem value="green">Active</MenuItem>
-                    <MenuItem value="red">Inactive</MenuItem>
+                    {statuses.map((status, index) => (
+                      <MenuItem key={index} value={status}>{status}</MenuItem>
+                    ))}
                   </Field>
 
                   <Field
@@ -164,7 +214,7 @@ const Add = () => {
 
                   <CustomButton
                     type="submit"
-                    text="Submit"
+                    text="Add"
                     style={{ marginTop: '1rem' }}
                   />
                 </Form>

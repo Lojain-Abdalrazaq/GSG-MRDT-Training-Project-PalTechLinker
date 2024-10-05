@@ -1,12 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { Box, Grid, Typography, Container, CircularProgress } from "@mui/material";
+import {
+  Box,
+  Grid,
+  Typography,
+  Container,
+  CircularProgress,
+} from "@mui/material";
 import Colors from "../../../Assets/Colors/Colors";
 import InternshipCard from "../../Home/Internships/InternshipCard";
 import axios from "axios";
+import CustomButton from "../../../CommonComponents/CustomButton";
+import { useNavigate } from "react-router-dom";
 
 const CompaniesIntern = ({ companyId }) => {
   const [internships, setInternships] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   // Fetch internships data from the API
   useEffect(() => {
@@ -72,7 +81,7 @@ const CompaniesIntern = ({ companyId }) => {
             fontWeight: "bold",
           }}
         >
-         Posted Internships
+          Posted Internships
         </Typography>
         <span
           style={{
@@ -87,7 +96,7 @@ const CompaniesIntern = ({ companyId }) => {
         />
       </Box>
 
-      {/* Interships Cards */}
+      {/* Internships Cards */}
       <Grid container spacing={6} justifyContent="center">
         {internships.length > 0 ? (
           internships.map((internship) => (
@@ -99,6 +108,20 @@ const CompaniesIntern = ({ companyId }) => {
           <Typography>No internships available for this company.</Typography>
         )}
       </Grid>
+      <CustomButton
+        text="Add Internships"
+        fullWidth={false}
+        sx={{
+          fontSize: "1.2rem",
+          padding: "0.8rem 2.5rem",
+          borderRadius: "10px",
+        }}
+        onClick={() =>
+          navigate(`/AddInternShip/${companyId}`, {
+            state: { company_id: companyId },
+          })
+        }
+      />
     </Container>
   );
 };
