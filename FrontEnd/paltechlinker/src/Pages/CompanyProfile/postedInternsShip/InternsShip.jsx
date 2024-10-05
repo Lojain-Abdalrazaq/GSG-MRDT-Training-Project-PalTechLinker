@@ -1,20 +1,46 @@
-import React from "react";
-import { Box, Grid, Typography, Container } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Box, Grid, Typography, Container, CircularProgress } from "@mui/material";
 import Colors from "../../../Assets/Colors/Colors";
-import CompanyCard from "./PostesInternshipCadr";
-import CustomButton from "../../../CommonComponents/CustomButton";
-import  { useEffect, useState } from 'react';
+import InternshipCard from "../../Home/Internships/InternshipCard";
+import axios from "axios";
 
+const CompaniesIntern = ({ companyId }) => {
+  const [internships, setInternships] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-
-const CompaniesIntern = (companyId) => {
-  const [companies, setCompanies] = useState([]); 
+  // Fetch internships data from the API
   useEffect(() => {
-    fetch(`/company/${companyId}`)
-          .then(response => response.json())
-      .then(data => setCompanies(data))
-      .catch(error => console.error('Error fetching companies:', error));
-  }, []);
+    const fetchInternships = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8081/api/interns/read/all/company/${companyId}`
+        );
+        setInternships(response.data);
+      } catch (error) {
+        console.error("Error fetching company data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchInternships();
+  }, [companyId]);
+
+  if (loading) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
+
   return (
     <Container
       maxWidth="lg"
@@ -46,13 +72,13 @@ const CompaniesIntern = (companyId) => {
             fontWeight: "bold",
           }}
         >
-          Companies
+         Posted Internships
         </Typography>
         <span
           style={{
             content: '""',
             display: "block",
-            width: 160,
+            width: 280,
             height: "4px",
             backgroundColor: Colors.secondary,
             position: "absolute",
@@ -61,25 +87,18 @@ const CompaniesIntern = (companyId) => {
         />
       </Box>
 
-      {/* Company Cards */}
-      <Grid
-        container
-        spacing={6} 
-        justifyContent="center"
-      >
-        {companies.map((company, index) => (
-          <Grid item xs={12} sm={6} md={5} lg={5} key={company.id}
-            sx={{ display: "flex", justifyContent: "center" }}
-          >
-            <CompanyCard company={company} index={index} />
-          </Grid>
-        ))}
+      {/* Interships Cards */}
+      <Grid container spacing={6} justifyContent="center">
+        {internships.length > 0 ? (
+          internships.map((internship) => (
+            <Grid item xs={12} sm={6} md={4} key={internship.id}>
+              <InternshipCard internship={internship} />
+            </Grid>
+          ))
+        ) : (
+          <Typography>No internships available for this company.</Typography>
+        )}
       </Grid>
-
-      {/* Show More Button */}
-      <Box mt={4}>
-        <CustomButton text="Show More" fullWidth={false} />
-      </Box>
     </Container>
   );
 };
