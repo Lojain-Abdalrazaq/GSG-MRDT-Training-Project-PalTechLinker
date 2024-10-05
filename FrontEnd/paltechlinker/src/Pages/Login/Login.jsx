@@ -30,6 +30,9 @@ const Login = () => {
         {
           email: values.email,
           password: values.password,
+        },
+        {
+          withCredentials: true,
         }
       );
 
@@ -40,10 +43,10 @@ const Login = () => {
 
         //store the company_id in local storage
         localStorage.setItem("company_id", company_id);
-
         navigate(`/company/${company_id}`, {
           state: { company_id: company_id },
         });
+        window.location.reload();
       }
     } catch (error) {
       // Handle error response (e.g., 401 Unauthorized)
