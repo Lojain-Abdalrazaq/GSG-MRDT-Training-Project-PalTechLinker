@@ -20,7 +20,7 @@ const InternshipsPage = () => {
   const [nameSearch, setNameSearch] = useState(""); // State for name search input
   const [addressSearch, setAddressSearch] = useState(""); // State for address search input
   const [statusSearch, setStatusSearch] = useState(""); // State for status search input
-  const internsPerPage = 12; // Set 12 interns per page
+  const internsPerPage = 9; // Set 12 interns per page
   const navigate = useNavigate();
 
   // Fetch interns from the API

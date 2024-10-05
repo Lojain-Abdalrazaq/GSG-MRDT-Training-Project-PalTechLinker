@@ -79,6 +79,7 @@ const InternshipCard = ({ internship, onClick }) => {
         flexDirection: { xs: "column", sm: "row" },
         padding: "1rem",
         backgroundColor: Colors.background,
+        height: 350,
         boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
         borderRadius: "15px",
         transition: "transform 0.3s ease, box-shadow 0.3s ease",
@@ -96,7 +97,14 @@ const InternshipCard = ({ internship, onClick }) => {
       />
 
       {/* Internship Details */}
-      <CardContent sx={{ flex: 1, textAlign: "left", position: "relative" }}>
+      <CardContent
+        sx={{
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          gap:1
+        }}
+      >
         <Typography
           variant="h6"
           sx={{
@@ -130,8 +138,6 @@ const InternshipCard = ({ internship, onClick }) => {
             borderRadius: "15px",
             fontFamily: "'Cairo', sans-serif",
             fontWeight: "bold",
-            right: 5,
-            position: "absolute",
             ...getStatusStyles(internship.status),
           }}
         >
@@ -153,7 +159,7 @@ const InternshipCard = ({ internship, onClick }) => {
           sx={{
             display: "flex",
             justifyContent: "flex-start",
-            marginTop: "1.5rem",
+            marginTop: "auto",
           }}
         >
           <CustomButton
