@@ -1,8 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Box, Grid, Typography, Container, CircularProgress } from "@mui/material";
+import {
+  Box,
+  Grid,
+  Typography,
+  Container,
+  CircularProgress,
+} from "@mui/material";
 import Colors from "../../../Assets/Colors/Colors";
 import InternshipCard from "../../Home/Internships/InternshipCard";
 import axios from "axios";
+import CustomButton from "../../../CommonComponents/CustomButton";
 
 const CompaniesIntern = ({ companyId }) => {
   const [internships, setInternships] = useState([]);
@@ -72,7 +79,7 @@ const CompaniesIntern = ({ companyId }) => {
             fontWeight: "bold",
           }}
         >
-         Posted Internships
+          Posted Internships
         </Typography>
         <span
           style={{
@@ -99,6 +106,15 @@ const CompaniesIntern = ({ companyId }) => {
           <Typography>No internships available for this company.</Typography>
         )}
       </Grid>
+      <CustomButton
+        text="Add Internships"
+        fullWidth={false}
+        sx={{
+          fontSize: "1.2rem",
+          padding: "0.8rem 2.5rem",
+          borderRadius: "10px",
+        }}
+      />
     </Container>
   );
 };
