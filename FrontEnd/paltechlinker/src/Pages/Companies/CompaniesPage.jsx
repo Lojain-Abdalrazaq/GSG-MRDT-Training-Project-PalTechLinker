@@ -67,7 +67,9 @@ const CompaniesPage = () => {
   );
 
   const handleCardClick = (id) => {
-    navigate(`/companies/read/${id}`);
+    navigate(`/company/${id}`, {
+      state: { company_id: id },
+    });
   };
 
   return (
