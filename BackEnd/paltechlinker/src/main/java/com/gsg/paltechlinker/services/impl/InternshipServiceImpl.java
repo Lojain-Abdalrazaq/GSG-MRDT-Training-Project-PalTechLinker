@@ -32,6 +32,7 @@ public class InternshipServiceImpl implements InternshipService {
             Optional.ofNullable(internshipNewData.getDescription()).ifPresent(storedInternship::setDescription);
             Optional.ofNullable(internshipNewData.getApplicationLink()).ifPresent(storedInternship::setApplicationLink);
             Optional.ofNullable(internshipNewData.getStatus()).ifPresent(storedInternship::setStatus);
+            Optional.ofNullable(internshipNewData.getType()).ifPresent(storedInternship::setType);
             return internshipRepository.save(storedInternship);
         }).orElseThrow(() -> new RuntimeException("Internship not found"));
     }
@@ -55,7 +56,6 @@ public class InternshipServiceImpl implements InternshipService {
     public boolean isExists(Long id) {
         return internshipRepository.existsById(id);
     }
-
 
     @Override
     public List<InternshipEntity> findByCompanyId(Long companyId) {
