@@ -1,5 +1,7 @@
 package com.gsg.paltechlinker.controllers;
 
+import com.gsg.paltechlinker.domain.enums.ApplicationStatus;
+import com.gsg.paltechlinker.domain.enums.InternshipType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.gsg.paltechlinker.domain.dto.InternshipDto;
@@ -8,6 +10,8 @@ import com.gsg.paltechlinker.domain.entities.InternshipEntity;
 import com.gsg.paltechlinker.mappers.Mapper;
 import com.gsg.paltechlinker.services.CompanyService;
 import com.gsg.paltechlinker.services.InternshipService;
+
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -84,6 +88,20 @@ public class InternshipController {
     public ResponseEntity<Void> deleteInternship(@PathVariable Long id) {
         internshipService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    // API to return list of ApplicationStatus
+    @GetMapping("/application-status")
+    public ResponseEntity<List<ApplicationStatus>> getApplicationStatusList() {
+        List<ApplicationStatus> statusList = Arrays.asList(ApplicationStatus.values());
+        return ResponseEntity.ok(statusList);
+    }
+
+    // API to return list of InternshipType
+    @GetMapping("/internship-type")
+    public ResponseEntity<List<InternshipType>> getInternshipTypeList() {
+        List<InternshipType> typeList = Arrays.asList(InternshipType.values());
+        return ResponseEntity.ok(typeList);
     }
 
 }

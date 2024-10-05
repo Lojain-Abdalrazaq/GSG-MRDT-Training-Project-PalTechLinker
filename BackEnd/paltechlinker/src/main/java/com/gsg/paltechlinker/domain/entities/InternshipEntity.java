@@ -2,6 +2,7 @@ package com.gsg.paltechlinker.domain.entities;
 
 import com.gsg.paltechlinker.domain.enums.ApplicationStatus;
 
+import com.gsg.paltechlinker.domain.enums.InternshipType;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -41,6 +42,9 @@ public class InternshipEntity {
 
     @Enumerated(EnumType.STRING)
     private ApplicationStatus status;
+
+    @Enumerated(EnumType.STRING)
+    private InternshipType type;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "company_id")
