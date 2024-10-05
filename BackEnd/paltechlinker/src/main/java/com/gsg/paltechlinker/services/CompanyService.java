@@ -21,4 +21,6 @@ public interface CompanyService {
 
         boolean isExists(Long id);
 
+        boolean isEmailExists(String email);
+
 }

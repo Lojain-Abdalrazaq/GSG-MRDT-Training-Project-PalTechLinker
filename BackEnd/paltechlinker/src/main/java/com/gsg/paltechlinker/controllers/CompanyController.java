@@ -75,4 +75,19 @@ public class CompanyController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    // sign-up functionality
+    @PostMapping("/signup")
+    public ResponseEntity<String> signup(@RequestBody CompanyDto companyDto) {
+        // Check if email is already registered
+        if (companyService.isEmailExists(companyDto.getEmail())) {
+            return new ResponseEntity<>("Email already in use. Use different Email", HttpStatus.CONFLICT);
+        }
+        // Save new company
+        CompanyEntity companyEntity = mapper.mapFrom(companyDto);
+        companyService.save(companyEntity);
+        return new ResponseEntity<>("Signup successful.", HttpStatus.CREATED);
+    }
+
+
+
 }
