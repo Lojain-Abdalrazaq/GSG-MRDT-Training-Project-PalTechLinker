@@ -59,5 +59,20 @@ public class CompanyServiceImpl implements CompanyService {
     public boolean isExists(Long id) {
         return companyRepository.existsById(id);
     }
-    
+
+    @Override
+    public boolean isEmailExists(String email) {
+        Optional<CompanyEntity> companyEntity = companyRepository.findByEmail(email);
+        return companyEntity.isPresent();  // it will returns true if a company with the given email exists
+    }
+
+    // implementing the Login logic
+    @Override
+    public Optional<CompanyEntity> authenticate(String email, String password) {
+        Optional<CompanyEntity> company = companyRepository.findByEmail(email);
+        if (company.isPresent() && company.get().getPassword().equals(password)) {
+            return company;
+        }
+        return Optional.empty();
+    }
 }
