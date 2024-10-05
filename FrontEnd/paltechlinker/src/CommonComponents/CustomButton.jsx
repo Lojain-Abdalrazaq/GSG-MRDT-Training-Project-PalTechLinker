@@ -2,7 +2,7 @@ import React from "react";
 import { Button } from "@mui/material";
 import Colors from "../Assets/Colors/Colors";
 
-const CustomButton = ({ text, onClick, fullWidth = false, sx = {} }) => {
+const CustomButton = ({ text, onClick, fullWidth = false, sx = {}, type = "button" }) => {
   return (
     <Button
       variant="contained"
@@ -17,6 +17,7 @@ const CustomButton = ({ text, onClick, fullWidth = false, sx = {} }) => {
         ...sx,
       }}
       onClick={onClick}
+      type={type}
     >
       {text}
     </Button>
