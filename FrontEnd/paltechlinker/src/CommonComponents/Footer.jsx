@@ -44,7 +44,7 @@ const Footer = () => {
             sx={{ fontFamily: "'Cairo', sans-serif" }}
           >
             {" "}
-            example@example.com
+            paltechlinker@gmail.com
           </Typography>
         </Box>
         <Box sx={{ display: "flex", flexDirection: "column" }}>
@@ -152,7 +152,7 @@ const Footer = () => {
           Home
         </Link>
         <Link
-          href="/jobs"
+          href="/internships"
           variant="h6"
           sx={{
             display: "block",
@@ -163,7 +163,7 @@ const Footer = () => {
             "&:hover": { textDecoration: "underline" },
           }}
         >
-          Jobs
+          Internships
         </Link>
         <Link
           href="/companies"

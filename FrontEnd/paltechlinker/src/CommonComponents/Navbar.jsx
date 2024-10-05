@@ -1,29 +1,62 @@
 import React, { useState, useEffect } from "react";
 import { AppBar, Toolbar, Box } from "@mui/material";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
 import Logo from "../Assets/Images/logo2.png";
 import Colors from "../Assets/Colors/Colors";
 
-const Pages = [
-  { title: "Home", link: "/" },
-  { title: "Internships", link: "/internships" },
-  { title: "Companies", link: "/companies" },
-  { title: "Log In", link: "/login" },
-  { title: "Sign Up", link: "/signup" },
-];
-
 const Navbar = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [activeButton, setActiveButton] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    const currentPage = Pages.find(page => page.link === location.pathname);
+    const currentPage = Pages.find((page) => page.link === location.pathname);
     if (currentPage) {
       setActiveButton(currentPage.title);
     } else {
-      setActiveButton(Pages[0].title); 
+      setActiveButton(Pages[0].title);
     }
   }, [location.pathname]);
+
+  // Check if the company is logged in
+  useEffect(() => {
+    const companyId = localStorage.getItem("company_id");
+    setIsLoggedIn(!!companyId); // Set to true if company_id exists
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      await axios.post("http://localhost:8081/api/auth/logout", {}, {
+        withCredentials: true, // Include credentials to ensure the session is valid
+      });
+      localStorage.removeItem("company_id");
+      setIsLoggedIn(false);
+      window.location.reload();
+      navigate("/login");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
+
+  const Pages = [
+    { title: "Home", link: "/" },
+    { title: "Internships", link: "/internships" },
+    { title: "Companies", link: "/companies" },
+    ...(isLoggedIn
+      ? [
+          {
+            title: "Profile",
+            link: `/company/${localStorage.getItem("company_id")}`,
+          },
+          { title: "Log Out", link: "/login", onClick: handleLogout },
+        ]
+      : [
+          { title: "Sign Up", link: "/signup" },
+          { title: "Log In", link: "/login" },
+        ]),
+  ];
 
   const handleButtonClick = (button) => {
     setActiveButton(button);
@@ -52,9 +85,13 @@ const Navbar = () => {
         />
 
         <Box sx={{ display: "flex", gap: "30px" }}>
-          {Pages.map(({ title, link }) => (
+          {Pages.map(({ title, link, onClick }) => (
             <Box key={title} sx={{ position: "relative" }}>
-              <Link to={link} style={{ textDecoration: "none" }}>
+              <Link
+                to={link}
+                style={{ textDecoration: "none" }}
+                onClick={onClick}
+              >
                 <Box
                   onClick={() => handleButtonClick(title)}
                   sx={{
