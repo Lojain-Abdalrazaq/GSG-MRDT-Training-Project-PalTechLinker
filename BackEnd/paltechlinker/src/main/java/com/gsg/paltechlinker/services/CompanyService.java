@@ -23,4 +23,6 @@ public interface CompanyService {
 
         boolean isEmailExists(String email);
 
+        Optional<CompanyEntity> authenticate(String email, String password);
+
 }
