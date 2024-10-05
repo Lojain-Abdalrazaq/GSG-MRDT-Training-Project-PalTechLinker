@@ -120,7 +120,7 @@ const InternshipCard = ({ internship, onClick }) => {
             fontWeight: "bold",
           }}
         >
-          {internship.status}
+          {internship.type}
         </Typography>
 
         <Box
