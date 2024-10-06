@@ -5,6 +5,7 @@ import com.gsg.paltechlinker.domain.dto.InternshipDto;
 import com.gsg.paltechlinker.domain.entities.CompanyEntity;
 import com.gsg.paltechlinker.domain.entities.InternshipEntity;
 import com.gsg.paltechlinker.domain.enums.ApplicationStatus;
+import com.gsg.paltechlinker.domain.enums.InternshipType;
 
 public class TestDataUtil {
 
@@ -85,6 +86,7 @@ public class TestDataUtil {
                 .applicationLink("https://www.innovatecorp.com/internship/apply")
                 .description("This internship offers hands-on experience in AI research and development.")
                 .status(ApplicationStatus.OPEN_FOR_APPLICATION)
+                .type(InternshipType.HYBRID)
                 .company(null)
                 .build();
     }
@@ -96,6 +98,7 @@ public class TestDataUtil {
                 .applicationLink("https://www.innovatecorp.com/software-internship/apply")
                 .description("Join us to develop innovative software solutions with cutting-edge technologies.")
                 .status(ApplicationStatus.CANCELED) 
+                .type(InternshipType.ONLINE)
                 .company(null)
                 .build();
     }
@@ -107,6 +110,7 @@ public class TestDataUtil {
                 .applicationLink("https://www.innovatecorp.com/internship/apply")
                 .description("This internship offers hands-on experience in AI research and development.")
                 .status(ApplicationStatus.OPEN_FOR_APPLICATION)
+                .type(InternshipType.HYBRID)
                 .company(null)
                 .build();
     }
@@ -118,6 +122,7 @@ public class TestDataUtil {
                 .applicationLink("https://www.innovatecorp.com/software-internship/apply")
                 .description("Join us to develop innovative software solutions with cutting-edge technologies.")
                 .status(ApplicationStatus.CANCELED) 
+                .type(InternshipType.ONLINE)
                 .company(null)
                 .build();
     }

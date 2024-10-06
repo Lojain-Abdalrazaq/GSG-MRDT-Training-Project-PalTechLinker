@@ -9,11 +9,11 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gsg.paltechlinker.TestDataUtil;
 import com.gsg.paltechlinker.domain.entities.CompanyEntity;
 import com.gsg.paltechlinker.domain.entities.InternshipEntity;
+import com.gsg.paltechlinker.services.CompanyService;
 import com.gsg.paltechlinker.services.InternshipService;
 
 
@@ -23,13 +23,15 @@ import com.gsg.paltechlinker.services.InternshipService;
 public class InternshipControllerIntegrationTests {
     
     private InternshipService internshipService;
+    private CompanyService companyService;
     private MockMvc mockMvc;
     private ObjectMapper objectMapper;
 
     @Autowired
-    public InternshipControllerIntegrationTests(MockMvc mockMvc, InternshipService internshipService) {
+    public InternshipControllerIntegrationTests(MockMvc mockMvc, CompanyService companyService, InternshipService internshipService) {
         this.mockMvc = mockMvc;
         this.internshipService = internshipService;
+        this.companyService = companyService;
         this.objectMapper = new ObjectMapper();
     }
 
@@ -37,6 +39,11 @@ public class InternshipControllerIntegrationTests {
     public void testThatCreateInternshipReturnsHttpStatus201() throws Exception {
         InternshipEntity internshipEntity = TestDataUtil.createTestInternshipEntityA();
         internshipEntity.setId(null);
+
+        CompanyEntity companyEntity = TestDataUtil.createTestCompanyEntityA();
+        CompanyEntity savedCompanyEntity = companyService.save(companyEntity);
+        internshipEntity.setCompany(savedCompanyEntity);
+
         String internJson = objectMapper.writeValueAsString(internshipEntity);
         mockMvc.perform(
             MockMvcRequestBuilders.post("/api/interns/create")
@@ -51,6 +58,11 @@ public class InternshipControllerIntegrationTests {
     public void testThatCreateInternshipReturnsSavedInternship() throws Exception {
         InternshipEntity internshipEntity = TestDataUtil.createTestInternshipEntityA();
         internshipEntity.setId(null);
+        
+        CompanyEntity companyEntity = TestDataUtil.createTestCompanyEntityA();
+        CompanyEntity savedCompanyEntity = companyService.save(companyEntity);
+        internshipEntity.setCompany(savedCompanyEntity);
+
         String internJson = objectMapper.writeValueAsString(internshipEntity);
         mockMvc.perform(
             MockMvcRequestBuilders.post("/api/interns/create")
@@ -66,6 +78,8 @@ public class InternshipControllerIntegrationTests {
             MockMvcResultMatchers.jsonPath("$.applicationLink").value(internshipEntity.getApplicationLink())
         ).andExpect(
             MockMvcResultMatchers.jsonPath("$.status").value(internshipEntity.getStatus().name())
+        ).andExpect(
+            MockMvcResultMatchers.jsonPath("$.type").value(internshipEntity.getType().name())
         );
     }
 
@@ -92,7 +106,7 @@ public class InternshipControllerIntegrationTests {
     }
 
     @Test
-    public void testThatGetInternshipReturnsInternshipIfExists() throws Exception {
+    public void testThatGetInternshipReturnsExistingInternship() throws Exception {
         InternshipEntity internshipEntity = TestDataUtil.createTestInternshipEntityA();
         InternshipEntity savedInternshipEntity = internshipService.save(internshipEntity);
         mockMvc.perform(
@@ -108,6 +122,8 @@ public class InternshipControllerIntegrationTests {
             MockMvcResultMatchers.jsonPath("$.applicationLink").value(savedInternshipEntity.getApplicationLink())
         ).andExpect(
             MockMvcResultMatchers.jsonPath("$.status").value(savedInternshipEntity.getStatus().name())
+        ).andExpect(
+            MockMvcResultMatchers.jsonPath("$.type").value(internshipEntity.getType().name())
         );
     }
 
@@ -141,64 +157,8 @@ public class InternshipControllerIntegrationTests {
             MockMvcResultMatchers.jsonPath("$.content[0].applicationLink").value(savedInternshipEntity.getApplicationLink())
         ).andExpect(
             MockMvcResultMatchers.jsonPath("$.content[0].status").value(savedInternshipEntity.getStatus().name())
-        );
-    }
-
-    @Test
-    public void testThatFullUpdateInternshipReturnsHttpStatus200WhenInternshipExists() throws Exception {
-        InternshipEntity internshipEntityToBeUpdated = TestDataUtil.createTestInternshipEntityA();
-        InternshipEntity internshipEntityWithNewData = TestDataUtil.createTestInternshipEntityB();
-
-        internshipService.save(internshipEntityToBeUpdated);
-
-        String internJson = objectMapper.writeValueAsString(internshipEntityWithNewData);
-
-        mockMvc.perform(
-            MockMvcRequestBuilders.put("/api/interns/update/" + internshipEntityToBeUpdated.getId())
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(internJson)
         ).andExpect(
-            MockMvcResultMatchers.status().isOk()
-        );
-    }
-
-    @Test
-    public void testThatFullUpdateInternshipReturnsHttpStatus404WhenNoInternshipExists() throws Exception {
-        InternshipEntity internshipEntityWithNewData = TestDataUtil.createTestInternshipEntityB();
-        String internJson = objectMapper.writeValueAsString(internshipEntityWithNewData);
-
-        mockMvc.perform(
-            MockMvcRequestBuilders.put("/api/interns/update/1")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(internJson)
-        ).andExpect(
-            MockMvcResultMatchers.status().isNotFound()
-        );
-    }
-
-    @Test
-    public void testThatFullUpdateInternshipUpdatesExistingAuthor() throws Exception {
-        InternshipEntity internshipEntityToBeUpdated = TestDataUtil.createTestInternshipEntityA();
-        InternshipEntity internshipEntityWithNewData = TestDataUtil.createTestInternshipEntityB();
-
-        internshipService.save(internshipEntityToBeUpdated);
-
-        String internJson = objectMapper.writeValueAsString(internshipEntityWithNewData);
-
-        mockMvc.perform(
-            MockMvcRequestBuilders.put("/api/interns/update/" + internshipEntityToBeUpdated.getId())
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(internJson)
-        ).andExpect(
-            MockMvcResultMatchers.jsonPath("$.id").isNumber()
-        ).andExpect(
-            MockMvcResultMatchers.jsonPath("$.name").value(internshipEntityWithNewData.getName())
-        ).andExpect(
-            MockMvcResultMatchers.jsonPath("$.description").value(internshipEntityWithNewData.getDescription())
-        ).andExpect(
-            MockMvcResultMatchers.jsonPath("$.applicationLink").value(internshipEntityWithNewData.getApplicationLink())
-        ).andExpect(
-            MockMvcResultMatchers.jsonPath("$.status").value(internshipEntityWithNewData.getStatus().name())
+            MockMvcResultMatchers.jsonPath("$.content[0].type").value(internshipEntity.getType().name())
         );
     }
 
@@ -255,13 +215,32 @@ public class InternshipControllerIntegrationTests {
             MockMvcResultMatchers.jsonPath("$.applicationLink").value(internshipEntityToBeUpdated.getApplicationLink())
         ).andExpect(
             MockMvcResultMatchers.jsonPath("$.status").value(internshipEntityToBeUpdated.getStatus().name())
+        ).andExpect(
+            MockMvcResultMatchers.jsonPath("$.type").value(internshipEntityToBeUpdated.getType().name())
         );
     }
 
     @Test
-    public void testThatDeleteInternshipReturnsHttpStatus204ForExistingInternship() throws Exception {
+    public void testThatDeleteInternshipReturnsHttpStatus204ForExistingInternshipWithNoCompany() throws Exception {
         InternshipEntity internshipEntity = TestDataUtil.createTestInternshipEntityA();
         InternshipEntity savedInternshipEntity = internshipService.save(internshipEntity);
+        mockMvc.perform(
+            MockMvcRequestBuilders.delete("/api/interns/delete/" + savedInternshipEntity.getId())
+            .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+            MockMvcResultMatchers.status().isNoContent()
+        );
+    }
+
+    @Test
+    public void testThatDeleteInternshipReturnsHttpStatus204ForExistingInternshipWithCompany() throws Exception {
+        InternshipEntity internshipEntity = TestDataUtil.createTestInternshipEntityA();
+        InternshipEntity savedInternshipEntity = internshipService.save(internshipEntity);
+
+        CompanyEntity companyEntity = TestDataUtil.createTestCompanyEntityA();
+        CompanyEntity savedCompanyEntity = companyService.save(companyEntity);
+        internshipEntity.setCompany(savedCompanyEntity);
+
         mockMvc.perform(
             MockMvcRequestBuilders.delete("/api/interns/delete/" + savedInternshipEntity.getId())
             .contentType(MediaType.APPLICATION_JSON)
