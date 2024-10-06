@@ -7,6 +7,8 @@ import {
   Paper,
   Box,
   IconButton,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import { Formik, Form, Field } from "formik";
 import Visibility from "@mui/icons-material/Visibility";
@@ -20,7 +22,9 @@ import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
   const navigate = useNavigate();
 
   const handleSubmit = async (values) => {
@@ -36,26 +40,32 @@ const Login = () => {
         }
       );
 
-      // Handle success response
       if (response.status === 200) {
         const { company_id, message } = response.data;
-        console.log("Login successful, Company ID:", company_id);
-
         //store the company_id in local storage
         localStorage.setItem("company_id", company_id);
-        navigate(`/company/${company_id}`, {
-          state: { company_id: company_id },
-        });
-        window.location.reload();
+        setSnackbarSeverity("success");
+        setSnackbarMessage("Login successful");
+        setSnackbarOpen(true);
+        setTimeout(() => {
+          navigate("/");
+          window.location.reload();
+        }, 1000);
       }
     } catch (error) {
-      // Handle error response (e.g., 401 Unauthorized)
       if (error.response && error.response.status === 401) {
-        setErrorMessage("Invalid email or password");
+        setSnackbarSeverity("error");
+        setSnackbarMessage("Invalid email or password");
       } else {
-        setErrorMessage("An error occurred. Please try again.");
+        setSnackbarSeverity("error");
+        setSnackbarMessage("An error occurred. Please try again.");
       }
+      setSnackbarOpen(true);
     }
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbarOpen(false);
   };
 
   return (
@@ -128,15 +138,7 @@ const Login = () => {
               </Link>
               .
             </Typography>
-            {errorMessage && (
-              <Typography
-                variant="body2"
-                color="error"
-                style={{ marginBottom: "1rem", textAlign: "center" }}
-              >
-                {errorMessage}
-              </Typography>
-            )}
+
             <Formik
               initialValues={{
                 email: "",
@@ -227,6 +229,22 @@ const Login = () => {
           />
         </Box>
       </Box>
+
+      {/* Snackbar Component */}
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={4000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </Container>
   );
 };

@@ -24,6 +24,7 @@ const EditProfile = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [avatarPreview, setAvatarPreview] = useState(null);
   const location = useLocation();
   const id = location.state?.company_id;
 
@@ -436,8 +437,12 @@ const EditProfile = () => {
                     }}
                   >
                     <Avatar
+                      src={
+                        avatarPreview || "http://example.com/default-avatar.png"
+                      }
                       sx={{ width: 100, height: 100, marginRight: "5rem" }}
                     />
+
                     <Button
                       variant="contained"
                       component="label"
@@ -453,20 +458,21 @@ const EditProfile = () => {
                       Upload Image
                       <input
                         hidden
-                        accept="image/*"
                         type="file"
-                        onChange={(event) =>
-                          setFieldValue("avatar", event.currentTarget.files[0])
-                        }
+                        accept="image/*"
+                        onChange={(event) => {
+                          const file = event.currentTarget.files[0];
+                          setFieldValue("avatar", file);
+                          if (file) {
+                            const previewUrl = URL.createObjectURL(file);
+                            setAvatarPreview(previewUrl);
+                          }
+                        }}
                       />
                     </Button>
                   </div>
 
-                  <CustomButton
-                    text="Update"
-                    fullWidth={true}
-                    type="submit"
-                  />
+                  <CustomButton text="Update" fullWidth={true} type="submit" />
                 </Form>
               )}
             </Formik>

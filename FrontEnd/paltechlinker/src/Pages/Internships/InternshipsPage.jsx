@@ -6,6 +6,10 @@ import {
   Container,
   Pagination,
   TextField,
+  Select,
+  MenuItem,
+  InputLabel,
+  FormControl,
 } from "@mui/material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -14,16 +18,17 @@ import InternshipCard from "../Home/Internships/InternshipCard";
 
 const InternshipsPage = () => {
   const [interns, setInterns] = useState([]);
-  const [filteredInterns, setFilteredInterns] = useState([]); // State for filtered interns
-  const [currentPage, setCurrentPage] = useState(1); // State for the current page
-  const [totalPages, setTotalPages] = useState(1); // State for the total number of pages
-  const [nameSearch, setNameSearch] = useState(""); // State for name search input
-  const [addressSearch, setAddressSearch] = useState(""); // State for address search input
-  const [statusSearch, setStatusSearch] = useState(""); // State for status search input
-  const internsPerPage = 9; // Set 12 interns per page
+  const [filteredInterns, setFilteredInterns] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [nameSearch, setNameSearch] = useState("");
+  const [addressSearch, setAddressSearch] = useState("");
+  const [statusSearch, setStatusSearch] = useState("");
+  const [statuses, setStatuses] = useState([]);
+  const internsPerPage = 9;
   const navigate = useNavigate();
 
-  // Fetch interns from the API
+  // Fetch interns and statuses from the API
   useEffect(() => {
     const fetchInterns = async () => {
       try {
@@ -37,13 +42,21 @@ const InternshipsPage = () => {
         console.error("Error fetching interns:", error);
       }
     };
-    fetchInterns();
-  }, []);
 
-  // Pagination handler
-  const handlePageChange = (event, value) => {
-    setCurrentPage(value);
-  };
+    const fetchStatuses = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:8081/api/interns/application-status"
+        );
+        setStatuses(response.data);
+      } catch (error) {
+        console.error("Error fetching statuses:", error);
+      }
+    };
+
+    fetchInterns();
+    fetchStatuses();
+  }, []);
 
   // Filter interns based on name, address, and status search terms
   useEffect(() => {
@@ -60,6 +73,11 @@ const InternshipsPage = () => {
     setCurrentPage(1); // Reset to first page when search term changes
   }, [nameSearch, addressSearch, statusSearch, interns]);
 
+  // Pagination handler
+  const handlePageChange = (event, value) => {
+    setCurrentPage(value);
+  };
+
   // Calculate the interns to display on the current page
   const indexOfLastInternship = currentPage * internsPerPage;
   const indexOfFirstInternship = indexOfLastInternship - internsPerPage;
@@ -67,10 +85,6 @@ const InternshipsPage = () => {
     indexOfFirstInternship,
     indexOfLastInternship
   );
-
-  const handleCardClick = (id) => {
-    navigate(`/interns/read/${id}`);
-  };
 
   return (
     <Container
@@ -148,23 +162,34 @@ const InternshipsPage = () => {
             },
           }}
         />
-        <TextField
-          fullWidth
-          variant="outlined"
-          placeholder="Search by status"
-          value={statusSearch}
-          onChange={(e) => setStatusSearch(e.target.value)}
-          sx={{
-            "& .MuiOutlinedInput-root": {
-              "&.Mui-focused fieldset": {
-                borderColor: Colors.primary,
+        
+        {/* Status Search as Select */}
+        <FormControl fullWidth variant="outlined">
+          <InputLabel id="status-label">Search by status</InputLabel>
+          <Select
+            labelId="status-label"
+            value={statusSearch}
+            onChange={(e) => setStatusSearch(e.target.value)}
+            label="Search by status"
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                "&.Mui-focused fieldset": {
+                  borderColor: Colors.primary,
+                },
               },
-            },
-          }}
-        />
+            }}
+          >
+            <MenuItem value="">All Statuses</MenuItem>
+            {statuses.map((status) => (
+              <MenuItem key={status} value={status}>
+                {status}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
       </Box>
 
-      {/* internship Cards */}
+      {/* Internship Cards */}
       <Grid
         container
         spacing={4}
@@ -176,7 +201,6 @@ const InternshipsPage = () => {
             <Grid item xs={12} sm={6} md={4} key={internship.id}>
               <InternshipCard
                 internship={internship}
-                onClick={() => handleCardClick(internship.id)}
               />
             </Grid>
           ))

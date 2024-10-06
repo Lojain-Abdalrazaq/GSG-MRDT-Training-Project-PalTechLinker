@@ -40,10 +40,6 @@ const Internships = () => {
     navigate("/internships");
   };
 
-  const handleCardClick = (id) => {
-    navigate(`/interns/read/${id}`);
-  };
-
   if (loading) {
     return (
       <Box
@@ -115,7 +111,6 @@ const Internships = () => {
           <Grid item xs={12} sm={6} md={4} key={internship.id}>
             <InternshipCard
               internship={internship}
-              onClick={() => handleCardClick(internship.id)}
             />
           </Grid>
         ))}

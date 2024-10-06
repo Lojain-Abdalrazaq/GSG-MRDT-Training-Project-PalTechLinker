@@ -122,7 +122,7 @@ const Footer = () => {
             fontFamily: "'Cairo', sans-serif",
           }}
         >
-          &copy; All rights reserved.
+          &copy; All rights reserved. Developed by: Maymona Khanfar, Lojain Abdalrazaq , Heba Abdelqader and Mays Alreem Hroub.
         </Typography>
       </Box>
 

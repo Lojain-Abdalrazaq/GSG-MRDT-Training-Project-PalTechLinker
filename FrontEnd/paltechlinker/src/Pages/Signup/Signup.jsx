@@ -9,6 +9,8 @@ import {
   Box,
   IconButton,
   Avatar,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import { Formik, Form, Field } from "formik";
 import Visibility from "@mui/icons-material/Visibility";
@@ -23,8 +25,11 @@ import { useNavigate } from "react-router-dom";
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+  const [avatarPreview, setAvatarPreview] = useState(null);
   const navigate = useNavigate();
-  const [signUpMessage, setSignUpMessage] = useState("");
 
   const handleSubmit = async (values) => {
     const signupData = {
@@ -50,18 +55,31 @@ const Register = () => {
       );
 
       if (response.status === 201) {
-        setSignUpMessage(response.data);
-        console.log("Sign Up successful");
-        navigate("/login");
+        setSnackbarSeverity("success");
+        setSnackbarMessage("Sign Up successful");
+        setSnackbarOpen(true);
+        setTimeout(() => {
+          navigate(`/login`);
+        }, 1000);
       } else {
-        setSignUpMessage(
-          response.data|| "Signup failed. Please try again."
-        );
+        setSnackbarSeverity("error");
+        setSnackbarMessage(response.data || "Signup failed. Please try again.");
+        setSnackbarOpen(true);
       }
     } catch (error) {
-      console.error("Error signing up:", error);
-      setSignUpMessage("Signup failed. Please try again.");
+      const errorMessage = typeof error.response?.data === 'string'
+        ? error.response?.data
+        : error.response?.data?.message || "Signup failed. Please try again.";
+    
+      setSnackbarSeverity("error");
+      setSnackbarMessage(errorMessage);
+      setSnackbarOpen(true);
     }
+    
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbarOpen(false);
   };
 
   return (
@@ -108,16 +126,6 @@ const Register = () => {
               >
                 Register Account
               </Typography>
-
-              {signUpMessage && (
-                <Typography
-                  variant="body1"
-                  color="error"
-                  style={{ marginTop: "1rem" }}
-                >
-                  {signUpMessage}
-                </Typography>
-              )}
 
               <Typography
                 variant="body2"
@@ -437,8 +445,13 @@ const Register = () => {
                       }}
                     >
                       <Avatar
+                        src={
+                          avatarPreview ||
+                          "http://example.com/default-avatar.png"
+                        }
                         sx={{ width: 100, height: 100, marginRight: "5rem" }}
                       />
+
                       <Button
                         variant="contained"
                         component="label"
@@ -454,14 +467,16 @@ const Register = () => {
                         Upload Image
                         <input
                           hidden
-                          accept="image/*"
                           type="file"
-                          onChange={(event) =>
-                            setFieldValue(
-                              "avatar",
-                              event.currentTarget.files[0]
-                            )
-                          }
+                          accept="image/*"
+                          onChange={(event) => {
+                            const file = event.currentTarget.files[0];
+                            setFieldValue("avatar", file);
+                            if (file) {
+                              const previewUrl = URL.createObjectURL(file);
+                              setAvatarPreview(previewUrl);
+                            }
+                          }}
                         />
                       </Button>
                     </div>
@@ -478,6 +493,21 @@ const Register = () => {
           </Paper>
         </Box>
       </Box>
+
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={4000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </Container>
   );
 };

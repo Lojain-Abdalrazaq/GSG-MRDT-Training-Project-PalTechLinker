@@ -13,7 +13,7 @@ import Colors from "../../Assets/Colors/Colors";
 import Image from "../../Assets/Images/login.png";
 import CustomButton from "../../CommonComponents/CustomButton";
 import axios from "axios";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const InternshipFormSchema = Yup.object().shape({
   internshipName: Yup.string().required("Internship name is required"),
@@ -30,6 +30,7 @@ const Edit = () => {
   const [types, setTypes] = useState([]);
   const [companyId, setCompanyId] = useState(null);
   const location = useLocation();
+  const navigate = useNavigate();
   const id = location.state?.internship_id;
 
   const [initialValues, setInitialValues] = useState({
@@ -115,6 +116,9 @@ const Edit = () => {
       );
       if (response.status === 200) {
         console.log("Internship updated successfully!");
+        navigate(`/company/${companyId}`, {
+          state: { company_id: companyId },
+        });
       }
     } catch (error) {
       console.error("Error updating internship:", error);

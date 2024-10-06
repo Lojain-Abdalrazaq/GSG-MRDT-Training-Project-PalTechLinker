@@ -19,7 +19,7 @@ const CompaniesPage = () => {
   const [totalPages, setTotalPages] = useState(1); // State for the total number of pages
   const [nameSearch, setNameSearch] = useState(""); // State for name search input
   const [addressSearch, setAddressSearch] = useState(""); // State for address search input
-  const companiesPerPage = 12; // Set 12 companies per page
+  const companiesPerPage = 9; // Set 9 companies per page
   const navigate = useNavigate();
 
   // Fetch companies from the API
