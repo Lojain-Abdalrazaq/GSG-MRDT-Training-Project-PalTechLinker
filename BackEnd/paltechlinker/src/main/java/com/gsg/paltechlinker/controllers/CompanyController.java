@@ -51,18 +51,6 @@ public class CompanyController {
         return companies.map(mapper::mapTo);
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<CompanyDto> fullUpdateCompany(@PathVariable Long id, @RequestBody CompanyDto companyDtoWithNewData) {
-        if (!companyService.isExists(id))
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
-        companyDtoWithNewData.setId(id);
-
-        CompanyEntity companyEntityWithNewData = mapper.mapFrom(companyDtoWithNewData);
-        CompanyEntity updatedCompanyEntity = companyService.save(companyEntityWithNewData);
-        return new ResponseEntity<>(mapper.mapTo(updatedCompanyEntity), HttpStatus.OK);
-    }
-
     @PatchMapping("/update/partial/{id}")
     public ResponseEntity<CompanyDto> partialUpdateCompany(@PathVariable Long id, @RequestBody CompanyDto companyDtoWithNewData) {
         if (!companyService.isExists(id))
