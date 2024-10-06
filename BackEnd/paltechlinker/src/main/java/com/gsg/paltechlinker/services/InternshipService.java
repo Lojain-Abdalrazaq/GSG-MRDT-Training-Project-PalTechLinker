@@ -7,6 +7,8 @@ import org.springframework.data.domain.Pageable;
 
 import com.gsg.paltechlinker.domain.entities.InternshipEntity;
 
+import jakarta.transaction.Transactional;
+
 public interface InternshipService {
     
     InternshipEntity save(InternshipEntity internshipEntity);
@@ -22,4 +24,7 @@ public interface InternshipService {
     boolean isExists(Long id);
 
     List<InternshipEntity> findByCompanyId(Long companyId);
+
+    @Transactional
+    void deleteByCompanyId(Long companyId);
 }
