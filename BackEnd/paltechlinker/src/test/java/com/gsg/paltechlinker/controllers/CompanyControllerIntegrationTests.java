@@ -238,7 +238,7 @@ public class CompanyControllerIntegrationTests {
     }
 
     @Test
-    public void testThatDeleteCompanyReturnsHttpStatus204ForExistingCompany() throws Exception {
+    public void testThatDeleteCompanyReturnsHttpStatus204ForExistingCompanyWithNoInterns() throws Exception {
         CompanyEntity companyEntity = TestDataUtil.createTestCompanyEntityA();
         CompanyEntity savedCompany = companyService.save(companyEntity);
 
