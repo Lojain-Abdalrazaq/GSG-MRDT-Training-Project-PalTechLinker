@@ -2,8 +2,12 @@ import React from "react";
 import { Card, CardContent, Typography, Avatar, Box } from "@mui/material";
 import Colors from "../../../Assets/Colors/Colors";
 import CustomButton from "../../../CommonComponents/CustomButton";
+import { useNavigate } from "react-router-dom";
 
 const InternshipCard = ({ internship, onClick }) => {
+  const storedCompanyId = localStorage.getItem("company_id");
+  const navigate = useNavigate();
+
   const getStatusStyles = (status) => {
     switch (status) {
       case "OPEN_FOR_APPLICATION":
@@ -102,7 +106,7 @@ const InternshipCard = ({ internship, onClick }) => {
           flex: 1,
           display: "flex",
           flexDirection: "column",
-          gap:1
+          gap: 1,
         }}
       >
         <Typography
@@ -154,7 +158,7 @@ const InternshipCard = ({ internship, onClick }) => {
           {internship.description}
         </Typography>
 
-        {/* Apply Now Button */}
+        {/* Conditionally Render Buttons */}
         <Box
           sx={{
             display: "flex",
@@ -162,10 +166,34 @@ const InternshipCard = ({ internship, onClick }) => {
             marginTop: "auto",
           }}
         >
-          <CustomButton
-            text="Apply Now"
-            onClick={() => window.open(internship.applicationLink, "_blank")}
-          />
+          {storedCompanyId ? (
+            storedCompanyId == internship.company.id ? (
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  gap: 8,
+                }}
+              >
+                <CustomButton
+                  text="Edit"
+                  fullWidth={false}
+                  onClick={() =>
+                    navigate(`/EditInternShip/${internship.id}`, {
+                      state: { internship_id: internship.id },
+                    })
+                  }
+                />
+                <CustomButton text="Delete" fullWidth={false} />
+              </Box>
+            ) : null
+          ) : (
+            <CustomButton
+              text="Apply Now"
+              onClick={() => window.open(internship.applicationLink, "_blank")}
+            />
+          )}
         </Box>
       </CardContent>
     </Card>
