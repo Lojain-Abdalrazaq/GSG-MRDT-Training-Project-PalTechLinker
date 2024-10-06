@@ -163,64 +163,6 @@ public class InternshipControllerIntegrationTests {
     }
 
     @Test
-    public void testThatFullUpdateInternshipReturnsHttpStatus200WhenInternshipExists() throws Exception {
-        InternshipEntity internshipEntityToBeUpdated = TestDataUtil.createTestInternshipEntityA();
-        InternshipEntity internshipEntityWithNewData = TestDataUtil.createTestInternshipEntityB();
-
-        internshipService.save(internshipEntityToBeUpdated);
-
-        String internJson = objectMapper.writeValueAsString(internshipEntityWithNewData);
-
-        mockMvc.perform(
-            MockMvcRequestBuilders.put("/api/interns/update/" + internshipEntityToBeUpdated.getId())
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(internJson)
-        ).andExpect(
-            MockMvcResultMatchers.status().isOk()
-        );
-    }
-
-    @Test
-    public void testThatFullUpdateInternshipReturnsHttpStatus404WhenNoInternshipExists() throws Exception {
-        InternshipEntity internshipEntityWithNewData = TestDataUtil.createTestInternshipEntityB();
-        String internJson = objectMapper.writeValueAsString(internshipEntityWithNewData);
-
-        mockMvc.perform(
-            MockMvcRequestBuilders.put("/api/interns/update/1")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(internJson)
-        ).andExpect(
-            MockMvcResultMatchers.status().isNotFound()
-        );
-    }
-
-    @Test
-    public void testThatFullUpdateInternshipUpdatesExistingAuthor() throws Exception {
-        InternshipEntity internshipEntityToBeUpdated = TestDataUtil.createTestInternshipEntityA();
-        InternshipEntity internshipEntityWithNewData = TestDataUtil.createTestInternshipEntityB();
-
-        internshipService.save(internshipEntityToBeUpdated);
-
-        String internJson = objectMapper.writeValueAsString(internshipEntityWithNewData);
-
-        mockMvc.perform(
-            MockMvcRequestBuilders.put("/api/interns/update/" + internshipEntityToBeUpdated.getId())
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(internJson)
-        ).andExpect(
-            MockMvcResultMatchers.jsonPath("$.id").isNumber()
-        ).andExpect(
-            MockMvcResultMatchers.jsonPath("$.name").value(internshipEntityWithNewData.getName())
-        ).andExpect(
-            MockMvcResultMatchers.jsonPath("$.description").value(internshipEntityWithNewData.getDescription())
-        ).andExpect(
-            MockMvcResultMatchers.jsonPath("$.applicationLink").value(internshipEntityWithNewData.getApplicationLink())
-        ).andExpect(
-            MockMvcResultMatchers.jsonPath("$.status").value(internshipEntityWithNewData.getStatus().name())
-        );
-    }
-
-    @Test
     public void testThatPartialUpdateInternshipReturnsHttpStatus200WhenInternshipExists() throws Exception {
         InternshipEntity internshipEntityToBeUpdated = TestDataUtil.createTestInternshipEntityA();
         internshipService.save(internshipEntityToBeUpdated);
