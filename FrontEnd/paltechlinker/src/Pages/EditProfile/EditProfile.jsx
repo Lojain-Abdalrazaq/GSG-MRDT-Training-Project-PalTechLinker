@@ -1,48 +1,104 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
+  Button,
   Container,
   TextField,
   Typography,
   Paper,
   Box,
-  Button,
   IconButton,
   Avatar,
 } from "@mui/material";
 import { Formik, Form, Field } from "formik";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import * as Yup from "yup";
 import Colors from "../../Assets/Colors/Colors";
 import CustomButton from "../../CommonComponents/CustomButton";
+import axios from "axios";
 import Image from "../../Assets/Images/login.png";
-import { PhotoCamera } from "@mui/icons-material";
-// Validation schema using Yup
-const ProfileFormSchema = Yup.object().shape({
-  companyName: Yup.string().required("Company name is required"),
-  email: Yup.string().email("Invalid email format").required("Email is required"),
-  contactEmail: Yup.string().email("Invalid email format").required("Contact email is required"),
-  address: Yup.string().required("Address is required"),
-  companyWebsite: Yup.string().url("Invalid URL format").required("Company website is required"),
-  phoneNumber: Yup.string().required("Phone number is required"),
-  password: Yup.string().required("Password is required"),
-  confirmPassword: Yup.string()
-    .oneOf([Yup.ref("password"), null], "Passwords must match")
-    .required("Confirm password is required"),
-  description: Yup.string().required("Description is required"),
-  linkedInProfile: Yup.string().url("Invalid URL format").required("LinkedIn profile is required"),
-});
+import { useLocation, useNavigate } from "react-router-dom";
 
 const EditProfile = () => {
-  const initialValues = {
+  const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const location = useLocation();
+  const id = location.state?.company_id;
+
+  const [initialValues, setInitialValues] = useState({
     companyName: "",
-    email: "",
+    companyEmail: "",
     contactEmail: "",
     address: "",
-    companyWebsite: "",
-    phoneNumber: "",
+    website: "",
+    phone: "",
     password: "",
     confirmPassword: "",
     description: "",
-    linkedInProfile: "",
+    linkedIn: "",
+    avatar: null,
+    numberOfEmployees: "",
+  });
+
+  useEffect(() => {
+    const fetchCompanyDetails = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8081/api/companies/read/${id}`
+        );
+        const companyData = response.data;
+
+        setInitialValues({
+          companyName: companyData.name,
+          companyEmail: companyData.email,
+          contactEmail: companyData.contactEmail,
+          address: companyData.address,
+          website: companyData.websiteLink,
+          phone: companyData.phoneNumber,
+          password: companyData.password,
+          confirmPassword: companyData.password,
+          description: companyData.description,
+          linkedIn: companyData.socialAccount,
+          avatar: companyData.imageUrl || "https://via.placeholder.com/80",
+          numberOfEmployees: companyData.numberOfEmployees,
+        });
+      } catch (error) {
+        console.error("Error fetching company details", error);
+      }
+    };
+
+    if (id) {
+      fetchCompanyDetails();
+    }
+  }, [id]);
+
+  const handleSubmit = async (values) => {
+    try {
+      const response = await axios.patch(
+        `http://localhost:8081/api/companies/update/partial/${id}`,
+        {
+          name: values.companyName,
+          email: values.companyEmail,
+          contactEmail: values.contactEmail,
+          address: values.address,
+          websiteLink: values.website,
+          phoneNumber: values.phone,
+          password: values.password,
+          description: values.description,
+          socialAccount: values.linkedIn,
+          numberOfEmployees: values.numberOfEmployees,
+          imageUrl: values.avatar || "https://via.placeholder.com/80",
+        }
+      );
+      console.log("Update successful", response.data);
+      navigate(`/company/${id}`, {
+        state: { company_id: id },
+      });
+    } catch (error) {
+      console.error("Error updating company details", error);
+    }
   };
 
   return (
@@ -71,7 +127,6 @@ const EditProfile = () => {
           borderRadius: "8px",
         }}
       >
-        {/* Left Side: Profile Form */}
         <Box
           sx={{
             width: { xs: "100%", md: "50%" },
@@ -100,136 +155,318 @@ const EditProfile = () => {
             </Typography>
 
             <Formik
+              enableReinitialize
               initialValues={initialValues}
-              validationSchema={ProfileFormSchema}
-              onSubmit={(values) => {
-                console.log(values);
-              }}
+              validationSchema={Yup.object().shape({
+                companyName: Yup.string().required("Company Name is required"),
+                companyEmail: Yup.string()
+                  .email("Invalid email address")
+                  .required("Company Email is required"),
+                contactEmail: Yup.string()
+                  .email("Invalid email address")
+                  .required("Contact Email is required"),
+                address: Yup.string().required("Address is required"),
+                website: Yup.string()
+                  .url("Invalid URL")
+                  .required("Company Website is required"),
+                phone: Yup.string()
+                  .required("Phone Number is required")
+                  .matches(/^\d{10}$/, "Phone number must be 10 digits"),
+                password: Yup.string().required("Password is required"),
+                confirmPassword: Yup.string()
+                  .oneOf([Yup.ref("password"), null], "Passwords must match")
+                  .required("Confirm Password is required"),
+                description: Yup.string().required("Description is required"),
+                linkedIn: Yup.string()
+                  .url("Invalid LinkedIn URL")
+                  .required("LinkedIn is required"),
+                numberOfEmployees: Yup.number()
+                  .required("Number of Employees is required")
+                  .positive("Must be a positive number")
+                  .integer("Must be an integer"),
+              })}
+              onSubmit={handleSubmit}
             >
-              {({ errors, touched }) => (
-                <Form>
+              {({ setFieldValue, errors, touched }) => (
+                <Form style={{ width: "100%", marginTop: "1rem" }}>
                   <Field
                     as={TextField}
-                    label="Company Name"
+                    variant="outlined"
+                    margin="normal"
+                    fullWidth
                     name="companyName"
-                    fullWidth
-                    margin="normal"
-                    error={touched.companyName && Boolean(errors.companyName)}
+                    label="Company Name"
+                    error={touched.companyName && !!errors.companyName}
                     helperText={touched.companyName && errors.companyName}
+                    inputProps={{
+                      style: { fontFamily: "'Cairo', sans-serif" },
+                    }}
+                    InputLabelProps={{
+                      style: { fontFamily: "'Cairo', sans-serif" },
+                    }}
                   />
 
                   <Field
                     as={TextField}
-                    label="Email"
-                    name="email"
-                    fullWidth
+                    variant="outlined"
                     margin="normal"
-                    error={touched.email && Boolean(errors.email)}
-                    helperText={touched.email && errors.email}
+                    fullWidth
+                    disabled
+                    name="companyEmail"
+                    label="Company Email"
+                    error={touched.companyEmail && !!errors.companyEmail}
+                    helperText={touched.companyEmail && errors.companyEmail}
+                    inputProps={{
+                      style: { fontFamily: "'Cairo', sans-serif" },
+                    }}
+                    InputLabelProps={{
+                      style: { fontFamily: "'Cairo', sans-serif" },
+                    }}
                   />
 
                   <Field
                     as={TextField}
-                    label="Contact Email"
+                    variant="outlined"
+                    margin="normal"
+                    fullWidth
                     name="contactEmail"
-                    fullWidth
-                    margin="normal"
-                    error={touched.contactEmail && Boolean(errors.contactEmail)}
+                    label="Contact Email"
+                    error={touched.contactEmail && !!errors.contactEmail}
                     helperText={touched.contactEmail && errors.contactEmail}
+                    inputProps={{
+                      style: { fontFamily: "'Cairo', sans-serif" },
+                    }}
+                    InputLabelProps={{
+                      style: { fontFamily: "'Cairo', sans-serif" },
+                    }}
                   />
 
                   <Field
                     as={TextField}
-                    label="Address"
+                    variant="outlined"
+                    margin="normal"
+                    fullWidth
                     name="address"
-                    fullWidth
-                    margin="normal"
-                    error={touched.address && Boolean(errors.address)}
+                    label="Address"
+                    error={touched.address && !!errors.address}
                     helperText={touched.address && errors.address}
+                    inputProps={{
+                      style: { fontFamily: "'Cairo', sans-serif" },
+                    }}
+                    InputLabelProps={{
+                      style: { fontFamily: "'Cairo', sans-serif" },
+                    }}
                   />
 
                   <Field
                     as={TextField}
-                    label="Company Website"
-                    name="companyWebsite"
-                    fullWidth
+                    variant="outlined"
                     margin="normal"
-                    error={touched.companyWebsite && Boolean(errors.companyWebsite)}
-                    helperText={touched.companyWebsite && errors.companyWebsite}
-                  />
-
-                  <Field
-                    as={TextField}
+                    fullWidth
+                    name="phone"
                     label="Phone Number"
-                    name="phoneNumber"
-                    fullWidth
-                    margin="normal"
-                    error={touched.phoneNumber && Boolean(errors.phoneNumber)}
-                    helperText={touched.phoneNumber && errors.phoneNumber}
+                    error={touched.phone && !!errors.phone}
+                    helperText={touched.phone && errors.phone}
+                    inputProps={{
+                      style: { fontFamily: "'Cairo', sans-serif" },
+                    }}
+                    InputLabelProps={{
+                      style: { fontFamily: "'Cairo', sans-serif" },
+                    }}
                   />
 
                   <Field
                     as={TextField}
-                    label="Password"
-                    name="password"
-                    type="password"
-                    fullWidth
+                    variant="outlined"
                     margin="normal"
-                    error={touched.password && Boolean(errors.password)}
-                    helperText={touched.password && errors.password}
+                    fullWidth
+                    name="numberOfEmployees"
+                    label="Number of Employees"
+                    type="number"
+                    error={
+                      touched.numberOfEmployees && !!errors.numberOfEmployees
+                    }
+                    helperText={
+                      touched.numberOfEmployees && errors.numberOfEmployees
+                    }
+                    inputProps={{
+                      style: { fontFamily: "'Cairo', sans-serif" },
+                    }}
+                    InputLabelProps={{
+                      style: { fontFamily: "'Cairo', sans-serif" },
+                    }}
+                  />
+
+                  <div style={{ position: "relative" }}>
+                    <Field
+                      as={TextField}
+                      variant="outlined"
+                      margin="normal"
+                      fullWidth
+                      name="password"
+                      label="Password"
+                      type={showPassword ? "text" : "password"}
+                      error={touched.password && !!errors.password}
+                      inputProps={{
+                        style: { fontFamily: "'Cairo', sans-serif" },
+                      }}
+                      InputLabelProps={{
+                        style: { fontFamily: "'Cairo', sans-serif" },
+                      }}
+                    />
+                    <IconButton
+                      onClick={() => setShowPassword((prev) => !prev)}
+                      style={{
+                        position: "absolute",
+                        right: 0,
+                        top: "55%",
+                        transform: "translateY(-50%)",
+                      }}
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </div>
+
+                  <div style={{ position: "relative" }}>
+                    <Field
+                      as={TextField}
+                      variant="outlined"
+                      margin="normal"
+                      fullWidth
+                      name="confirmPassword"
+                      label="Confirm Password"
+                      type={showConfirmPassword ? "text" : "password"}
+                      error={
+                        touched.confirmPassword && !!errors.confirmPassword
+                      }
+                      helperText={
+                        touched.confirmPassword && errors.confirmPassword
+                      }
+                      inputProps={{
+                        style: { fontFamily: "'Cairo', sans-serif" },
+                      }}
+                      InputLabelProps={{
+                        style: { fontFamily: "'Cairo', sans-serif" },
+                      }}
+                    />
+                    <IconButton
+                      onClick={() => setShowConfirmPassword((prev) => !prev)}
+                      style={{
+                        position: "absolute",
+                        right: 0,
+                        top: "55%",
+                        transform: "translateY(-50%)",
+                      }}
+                    >
+                      {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </div>
+
+                  <Field
+                    as={TextField}
+                    variant="outlined"
+                    margin="normal"
+                    fullWidth
+                    name="website"
+                    label="Company Website"
+                    error={touched.website && !!errors.website}
+                    helperText={touched.website && errors.website}
+                    inputProps={{
+                      style: { fontFamily: "'Cairo', sans-serif" },
+                    }}
+                    InputLabelProps={{
+                      style: { fontFamily: "'Cairo', sans-serif" },
+                    }}
                   />
 
                   <Field
                     as={TextField}
-                    label="Confirm Password"
-                    name="confirmPassword"
-                    type="password"
-                    fullWidth
+                    variant="outlined"
                     margin="normal"
-                    error={touched.confirmPassword && Boolean(errors.confirmPassword)}
-                    helperText={touched.confirmPassword && errors.confirmPassword}
-                  />
-
-                  <Field
-                    as={TextField}
-                    label="Description"
+                    fullWidth
                     name="description"
-                    fullWidth
-                    margin="normal"
+                    label="Company Description"
                     multiline
                     rows={4}
-                    error={touched.description && Boolean(errors.description)}
+                    error={touched.description && !!errors.description}
                     helperText={touched.description && errors.description}
+                    inputProps={{
+                      style: { fontFamily: "'Cairo', sans-serif" },
+                    }}
+                    InputLabelProps={{
+                      style: { fontFamily: "'Cairo', sans-serif" },
+                    }}
                   />
 
-                  <Field
-                    as={TextField}
-                    label="LinkedIn Profile"
-                    name="linkedInProfile"
-                    fullWidth
-                    margin="normal"
-                    error={touched.linkedInProfile && Boolean(errors.linkedInProfile)}
-                    helperText={touched.linkedInProfile && errors.linkedInProfile}
-                  />
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      marginTop: "1rem",
+                    }}
+                  >
+                    <LinkedInIcon
+                      style={{
+                        marginRight: "0.5rem",
+                        color: Colors.secondary,
+                      }}
+                    />
+                    <Field
+                      as={TextField}
+                      variant="outlined"
+                      fullWidth
+                      name="linkedIn"
+                      label="LinkedIn Profile"
+                      error={touched.linkedIn && !!errors.linkedIn}
+                      helperText={touched.linkedIn && errors.linkedIn}
+                      inputProps={{
+                        style: { fontFamily: "'Cairo', sans-serif" },
+                      }}
+                      InputLabelProps={{
+                        style: { fontFamily: "'Cairo', sans-serif" },
+                      }}
+                    />
+                  </div>
 
-                  {/* Profile Image Upload */}
-                  <Box display="flex" alignItems="center" mt={2}>
-                    <Avatar sx={{ width: 80, height: 80 }} />
-                    <IconButton
-                      color="primary"
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      marginTop: "1.5rem",
+                    }}
+                  >
+                    <Avatar
+                      sx={{ width: 100, height: 100, marginRight: "5rem" }}
+                    />
+                    <Button
+                      variant="contained"
                       component="label"
-                      style={{ marginLeft: "1rem" }}
+                      style={{
+                        fontFamily: "'Cairo', sans-serif",
+                        color: "#fff",
+                        backgroundColor: Colors.primary,
+                        "&:hover": {
+                          backgroundColor: Colors.secondary,
+                        },
+                      }}
                     >
-                      <input hidden accept="image/*" type="file" />
-                      <PhotoCamera />
-                    </IconButton>
-                    <Button variant="contained" component="label">
                       Upload Image
-                      <input hidden accept="image/*" type="file" />
+                      <input
+                        hidden
+                        accept="image/*"
+                        type="file"
+                        onChange={(event) =>
+                          setFieldValue("avatar", event.currentTarget.files[0])
+                        }
+                      />
                     </Button>
-                  </Box>
+                  </div>
 
-                  <CustomButton type="submit" text="Update" style={{ marginTop: "1rem" }} />
+                  <CustomButton
+                    text="Update"
+                    fullWidth={true}
+                    type="submit"
+                  />
                 </Form>
               )}
             </Formik>

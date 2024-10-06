@@ -13,10 +13,12 @@ import {
 import Colors from "../../Assets/Colors/Colors";
 import CustomButton from "../../CommonComponents/CustomButton";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Profile = ({ companyId }) => {
   const [companyData, setCompanyData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCompanyData = async () => {
@@ -110,7 +112,15 @@ const Profile = ({ companyId }) => {
 
         {/* Edit Profile Button */}
         <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-          <CustomButton text="Edit Profile" />
+          <CustomButton
+            text="Edit Profile"
+            fullWidth={false}
+            onClick={() =>
+              navigate(`/EditProfile/${companyId}`, {
+                state: { company_id: companyId },
+              })
+            }
+          />
         </Box>
 
         <Box sx={{ marginBottom: 5 }}>
