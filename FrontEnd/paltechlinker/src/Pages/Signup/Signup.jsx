@@ -28,6 +28,7 @@ const Register = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+  const [avatarPreview, setAvatarPreview] = useState(null);
   const navigate = useNavigate();
 
   const handleSubmit = async (values) => {
@@ -66,12 +67,15 @@ const Register = () => {
         setSnackbarOpen(true);
       }
     } catch (error) {
+      const errorMessage = typeof error.response?.data === 'string'
+        ? error.response?.data
+        : error.response?.data?.message || "Signup failed. Please try again.";
+    
       setSnackbarSeverity("error");
-      setSnackbarMessage(
-        error.response?.data || "Signup failed. Please try again."
-      );
+      setSnackbarMessage(errorMessage);
       setSnackbarOpen(true);
     }
+    
   };
 
   const handleCloseSnackbar = () => {
@@ -441,8 +445,13 @@ const Register = () => {
                       }}
                     >
                       <Avatar
+                        src={
+                          avatarPreview ||
+                          "http://example.com/default-avatar.png"
+                        }
                         sx={{ width: 100, height: 100, marginRight: "5rem" }}
                       />
+
                       <Button
                         variant="contained"
                         component="label"
@@ -458,14 +467,16 @@ const Register = () => {
                         Upload Image
                         <input
                           hidden
-                          accept="image/*"
                           type="file"
-                          onChange={(event) =>
-                            setFieldValue(
-                              "avatar",
-                              event.currentTarget.files[0]
-                            )
-                          }
+                          accept="image/*"
+                          onChange={(event) => {
+                            const file = event.currentTarget.files[0];
+                            setFieldValue("avatar", file);
+                            if (file) {
+                              const previewUrl = URL.createObjectURL(file);
+                              setAvatarPreview(previewUrl);
+                            }
+                          }}
                         />
                       </Button>
                     </div>
