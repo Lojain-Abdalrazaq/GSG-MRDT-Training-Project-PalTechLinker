@@ -1,8 +1,7 @@
 import React from "react";
 import Profile from "./Profile";
 import CompaniesIntern from "./postedInternsShip/InternsShip";
-import AddInterns from "./postedInternsShip/addInterns";
-import { useParams, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 const Comapny = () => {
   const location = useLocation();
