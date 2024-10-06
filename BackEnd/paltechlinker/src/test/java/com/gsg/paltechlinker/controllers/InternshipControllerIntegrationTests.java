@@ -221,7 +221,7 @@ public class InternshipControllerIntegrationTests {
     }
 
     @Test
-    public void testThatDeleteInternshipReturnsHttpStatus204ForExistingInternship() throws Exception {
+    public void testThatDeleteInternshipReturnsHttpStatus204ForExistingInternshipWithNoCompany() throws Exception {
         InternshipEntity internshipEntity = TestDataUtil.createTestInternshipEntityA();
         InternshipEntity savedInternshipEntity = internshipService.save(internshipEntity);
         mockMvc.perform(
