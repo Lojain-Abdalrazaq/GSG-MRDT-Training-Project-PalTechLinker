@@ -143,7 +143,7 @@ public class CompanyControllerIntegrationTests {
     }
 
     @Test
-    public void testThatGetCompanyReturnsHttpStatus494WhenNoCompanyExists() throws Exception {
+    public void testThatGetCompanyReturnsHttpStatus404WhenNoCompanyExists() throws Exception {
         mockMvc.perform(
             MockMvcRequestBuilders.get("/api/companies/read/99")
                     .contentType(MediaType.APPLICATION_JSON)
@@ -153,7 +153,7 @@ public class CompanyControllerIntegrationTests {
     }
 
     @Test
-    public void testThatGetCompanyReturnsCompanyIfExists() throws Exception {
+    public void testThatGetCompanyReturnsExistingCompany() throws Exception {
         CompanyEntity companyEntity = TestDataUtil.createTestCompanyEntityA();
         CompanyEntity savedCompany = companyService.save(companyEntity);
 
