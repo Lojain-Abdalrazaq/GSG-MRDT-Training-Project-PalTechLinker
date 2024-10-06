@@ -116,8 +116,8 @@ const Edit = () => {
       );
       if (response.status === 200) {
         console.log("Internship updated successfully!");
-        navigate(`/company/${id}`, {
-          state: { company_id: id },
+        navigate(`/company/${companyId}`, {
+          state: { company_id: companyId },
         });
       }
     } catch (error) {

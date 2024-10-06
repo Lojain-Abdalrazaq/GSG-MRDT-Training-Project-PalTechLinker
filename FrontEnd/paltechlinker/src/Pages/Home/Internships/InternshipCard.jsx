@@ -16,7 +16,7 @@ import CustomButton from "../../../CommonComponents/CustomButton";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const InternshipCard = ({ internship, onClick }) => {
+const InternshipCard = ({ internship }) => {
   const storedCompanyId = localStorage.getItem("company_id");
   const navigate = useNavigate();
 
@@ -118,7 +118,6 @@ const InternshipCard = ({ internship, onClick }) => {
   return (
     <>
       <Card
-        onClick={onClick}
         sx={{
           display: "flex",
           flexDirection: { xs: "column", sm: "row" },

@@ -86,10 +86,6 @@ const InternshipsPage = () => {
     indexOfLastInternship
   );
 
-  const handleCardClick = (id) => {
-    navigate(`/interns/read/${id}`);
-  };
-
   return (
     <Container
       maxWidth="100%"
@@ -205,7 +201,6 @@ const InternshipsPage = () => {
             <Grid item xs={12} sm={6} md={4} key={internship.id}>
               <InternshipCard
                 internship={internship}
-                onClick={() => handleCardClick(internship.id)}
               />
             </Grid>
           ))

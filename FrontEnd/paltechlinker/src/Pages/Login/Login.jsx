@@ -48,9 +48,7 @@ const Login = () => {
         setSnackbarMessage("Login successful");
         setSnackbarOpen(true);
         setTimeout(() => {
-          navigate(`/company/${company_id}`, {
-            state: { company_id: company_id },
-          });
+          navigate("/");
           window.location.reload();
         }, 1000);
       }
@@ -239,7 +237,11 @@ const Login = () => {
         onClose={handleCloseSnackbar}
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       >
-        <Alert onClose={handleCloseSnackbar} severity={snackbarSeverity} sx={{ width: "100%" }}>
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
           {snackbarMessage}
         </Alert>
       </Snackbar>
