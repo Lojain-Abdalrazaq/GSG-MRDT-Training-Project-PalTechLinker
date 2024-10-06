@@ -1,5 +1,6 @@
 package com.gsg.paltechlinker.services.impl;
 
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -53,6 +54,12 @@ public class InternshipServiceImpl implements InternshipService {
     @Override
     public boolean isExists(Long id) {
         return internshipRepository.existsById(id);
+    }
+
+
+    @Override
+    public List<InternshipEntity> findByCompanyId(Long companyId) {
+        return internshipRepository.findByCompanyId(companyId);
     }
     
 }
