@@ -9,6 +9,8 @@ import {
   Box,
   IconButton,
   Avatar,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import { Formik, Form, Field } from "formik";
 import Visibility from "@mui/icons-material/Visibility";
@@ -23,8 +25,10 @@ import { useNavigate } from "react-router-dom";
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
   const navigate = useNavigate();
-  const [signUpMessage, setSignUpMessage] = useState("");
 
   const handleSubmit = async (values) => {
     const signupData = {
@@ -50,18 +54,28 @@ const Register = () => {
       );
 
       if (response.status === 201) {
-        setSignUpMessage(response.data);
-        console.log("Sign Up successful");
-        navigate("/login");
+        setSnackbarSeverity("success");
+        setSnackbarMessage("Sign Up successful");
+        setSnackbarOpen(true);
+        setTimeout(() => {
+          navigate(`/login`);
+        }, 1000);
       } else {
-        setSignUpMessage(
-          response.data|| "Signup failed. Please try again."
-        );
+        setSnackbarSeverity("error");
+        setSnackbarMessage(response.data || "Signup failed. Please try again.");
+        setSnackbarOpen(true);
       }
     } catch (error) {
-      console.error("Error signing up:", error);
-      setSignUpMessage("Signup failed. Please try again.");
+      setSnackbarSeverity("error");
+      setSnackbarMessage(
+        error.response?.data || "Signup failed. Please try again."
+      );
+      setSnackbarOpen(true);
     }
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbarOpen(false);
   };
 
   return (
@@ -108,16 +122,6 @@ const Register = () => {
               >
                 Register Account
               </Typography>
-
-              {signUpMessage && (
-                <Typography
-                  variant="body1"
-                  color="error"
-                  style={{ marginTop: "1rem" }}
-                >
-                  {signUpMessage}
-                </Typography>
-              )}
 
               <Typography
                 variant="body2"
@@ -478,6 +482,21 @@ const Register = () => {
           </Paper>
         </Box>
       </Box>
+
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={4000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </Container>
   );
 };
