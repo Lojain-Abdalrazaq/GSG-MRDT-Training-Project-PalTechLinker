@@ -106,7 +106,7 @@ public class InternshipControllerIntegrationTests {
     }
 
     @Test
-    public void testThatGetInternshipReturnsInternshipIfExists() throws Exception {
+    public void testThatGetInternshipReturnsExistingInternship() throws Exception {
         InternshipEntity internshipEntity = TestDataUtil.createTestInternshipEntityA();
         InternshipEntity savedInternshipEntity = internshipService.save(internshipEntity);
         mockMvc.perform(
@@ -122,6 +122,8 @@ public class InternshipControllerIntegrationTests {
             MockMvcResultMatchers.jsonPath("$.applicationLink").value(savedInternshipEntity.getApplicationLink())
         ).andExpect(
             MockMvcResultMatchers.jsonPath("$.status").value(savedInternshipEntity.getStatus().name())
+        ).andExpect(
+            MockMvcResultMatchers.jsonPath("$.type").value(internshipEntity.getType().name())
         );
     }
 
@@ -155,6 +157,8 @@ public class InternshipControllerIntegrationTests {
             MockMvcResultMatchers.jsonPath("$.content[0].applicationLink").value(savedInternshipEntity.getApplicationLink())
         ).andExpect(
             MockMvcResultMatchers.jsonPath("$.content[0].status").value(savedInternshipEntity.getStatus().name())
+        ).andExpect(
+            MockMvcResultMatchers.jsonPath("$.content[0].type").value(internshipEntity.getType().name())
         );
     }
 
