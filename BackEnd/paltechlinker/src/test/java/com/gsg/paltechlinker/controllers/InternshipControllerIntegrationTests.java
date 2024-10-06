@@ -39,7 +39,7 @@ public class InternshipControllerIntegrationTests {
     public void testThatCreateInternshipReturnsHttpStatus201() throws Exception {
         InternshipEntity internshipEntity = TestDataUtil.createTestInternshipEntityA();
         internshipEntity.setId(null);
-        
+
         CompanyEntity companyEntity = TestDataUtil.createTestCompanyEntityA();
         companyService.save(companyEntity);
         internshipEntity.setCompany(companyEntity);
@@ -58,6 +58,11 @@ public class InternshipControllerIntegrationTests {
     public void testThatCreateInternshipReturnsSavedInternship() throws Exception {
         InternshipEntity internshipEntity = TestDataUtil.createTestInternshipEntityA();
         internshipEntity.setId(null);
+        
+        CompanyEntity companyEntity = TestDataUtil.createTestCompanyEntityA();
+        companyService.save(companyEntity);
+        internshipEntity.setCompany(companyEntity);
+
         String internJson = objectMapper.writeValueAsString(internshipEntity);
         mockMvc.perform(
             MockMvcRequestBuilders.post("/api/interns/create")
@@ -73,6 +78,8 @@ public class InternshipControllerIntegrationTests {
             MockMvcResultMatchers.jsonPath("$.applicationLink").value(internshipEntity.getApplicationLink())
         ).andExpect(
             MockMvcResultMatchers.jsonPath("$.status").value(internshipEntity.getStatus().name())
+        ).andExpect(
+            MockMvcResultMatchers.jsonPath("$.type").value(internshipEntity.getType().name())
         );
     }
 
