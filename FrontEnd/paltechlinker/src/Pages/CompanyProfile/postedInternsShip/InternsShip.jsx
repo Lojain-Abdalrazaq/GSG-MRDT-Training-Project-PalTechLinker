@@ -52,13 +52,9 @@ const CompaniesIntern = ({ companyId }) => {
 
   return (
     <Container
-      maxWidth="lg"
+      maxWidth="100%"
       sx={{
         backgroundColor: Colors.background,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        flexDirection: "column",
         paddingBottom: 5,
         paddingTop: 5,
       }}
@@ -97,7 +93,7 @@ const CompaniesIntern = ({ companyId }) => {
       </Box>
 
       {/* Internships Cards */}
-      <Grid container spacing={6} justifyContent="center">
+      <Grid container spacing={4} justifyContent="center">
         {internships.length > 0 ? (
           internships.map((internship) => (
             <Grid item xs={12} sm={6} md={4} key={internship.id}>
@@ -105,9 +101,12 @@ const CompaniesIntern = ({ companyId }) => {
             </Grid>
           ))
         ) : (
-          <Typography>No internships available for this company.</Typography>
+          <Typography sx={{ marginTop: 3 }}>
+            No internships available for this company.
+          </Typography>
         )}
       </Grid>
+
       <CustomButton
         text="Add Internships"
         fullWidth={false}

@@ -26,7 +26,7 @@ function App() {
           <Route path="/companies" element={<CompaniesPage />} />
           <Route path="/internships" element={<InternshipsPage />} />
           <Route path="/AddInternShip/:id" element={<Add />} />
-          <Route path="/EditInternShip" element={<Edit />} />
+          <Route path="/EditInternShip/:id" element={<Edit />} />
         </Routes>
         <Footer />
       </div>

@@ -134,18 +134,37 @@ const Profile = ({ companyId }) => {
         {/* Company Information: Description and Contact Cards */}
         <Grid container spacing={3}>
           {/* Description Card */}
-          <CardInfoCard title="Description" content={companyData?.description} />
+          <CardInfoCard
+            title="Description"
+            content={companyData?.description}
+          />
 
           {/* Contact Information Card */}
           <CardInfoCard
             title="Contact Information"
             content={
-              <>
-                <Typography>Phone: {companyData?.phoneNumber}</Typography>
-                <Typography>Email: {companyData?.contactEmail}</Typography>
-                <Typography>Website: {companyData?.websiteLink}</Typography>
-                <Typography>LinkedIn: {companyData?.socialAccount}</Typography>
-              </>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "flex-start",
+                  textAlign: "left",
+                }}
+              >
+                <Typography sx={{ fontFamily: "'Cairo', sans-serif" }}>
+                  Phone: {companyData?.phoneNumber}
+                </Typography>
+                <Typography sx={{ fontFamily: "'Cairo', sans-serif" }}>
+                  Email: {companyData?.contactEmail}
+                </Typography>
+                <Typography sx={{ fontFamily: "'Cairo', sans-serif" }}>
+                  Website: {companyData?.websiteLink}
+                </Typography>
+                <Typography sx={{ fontFamily: "'Cairo', sans-serif" }}>
+                  LinkedIn: {companyData?.socialAccount}
+                </Typography>
+              </Box>
             }
           />
         </Grid>

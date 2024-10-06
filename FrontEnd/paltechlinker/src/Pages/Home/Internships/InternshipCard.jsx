@@ -2,8 +2,12 @@ import React from "react";
 import { Card, CardContent, Typography, Avatar, Box } from "@mui/material";
 import Colors from "../../../Assets/Colors/Colors";
 import CustomButton from "../../../CommonComponents/CustomButton";
+import { useNavigate } from "react-router-dom";
 
 const InternshipCard = ({ internship, onClick }) => {
+  const storedCompanyId = localStorage.getItem("company_id");
+  const navigate = useNavigate();
+
   const getStatusStyles = (status) => {
     switch (status) {
       case "OPEN_FOR_APPLICATION":
@@ -79,6 +83,7 @@ const InternshipCard = ({ internship, onClick }) => {
         flexDirection: { xs: "column", sm: "row" },
         padding: "1rem",
         backgroundColor: Colors.background,
+        height: 350,
         boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
         borderRadius: "15px",
         transition: "transform 0.3s ease, box-shadow 0.3s ease",
@@ -96,7 +101,14 @@ const InternshipCard = ({ internship, onClick }) => {
       />
 
       {/* Internship Details */}
-      <CardContent sx={{ flex: 1, textAlign: "left", position: "relative" }}>
+      <CardContent
+        sx={{
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          gap: 1,
+        }}
+      >
         <Typography
           variant="h6"
           sx={{
@@ -130,8 +142,6 @@ const InternshipCard = ({ internship, onClick }) => {
             borderRadius: "15px",
             fontFamily: "'Cairo', sans-serif",
             fontWeight: "bold",
-            right: 5,
-            position: "absolute",
             ...getStatusStyles(internship.status),
           }}
         >
@@ -148,18 +158,42 @@ const InternshipCard = ({ internship, onClick }) => {
           {internship.description}
         </Typography>
 
-        {/* Apply Now Button */}
+        {/* Conditionally Render Buttons */}
         <Box
           sx={{
             display: "flex",
             justifyContent: "flex-start",
-            marginTop: "1.5rem",
+            marginTop: "auto",
           }}
         >
-          <CustomButton
-            text="Apply Now"
-            onClick={() => window.open(internship.applicationLink, "_blank")}
-          />
+          {storedCompanyId ? (
+            storedCompanyId == internship.company.id ? (
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  gap: 8,
+                }}
+              >
+                <CustomButton
+                  text="Edit"
+                  fullWidth={false}
+                  onClick={() =>
+                    navigate(`/EditInternShip/${internship.id}`, {
+                      state: { internship_id: internship.id },
+                    })
+                  }
+                />
+                <CustomButton text="Delete" fullWidth={false} />
+              </Box>
+            ) : null
+          ) : (
+            <CustomButton
+              text="Apply Now"
+              onClick={() => window.open(internship.applicationLink, "_blank")}
+            />
+          )}
         </Box>
       </CardContent>
     </Card>

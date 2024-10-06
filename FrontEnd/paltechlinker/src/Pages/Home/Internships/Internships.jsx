@@ -111,7 +111,7 @@ const Internships = () => {
 
       {/* Internship Cards */}
       <Grid container spacing={4} justifyContent="center">
-        {internships.map((internship) => (
+        {internships.slice(0, 6).map((internship) => (
           <Grid item xs={12} sm={6} md={4} key={internship.id}>
             <InternshipCard
               internship={internship}
