@@ -5,6 +5,8 @@ import com.gsg.paltechlinker.domain.dto.CompanyDto;
 import com.gsg.paltechlinker.domain.entities.CompanyEntity;
 import com.gsg.paltechlinker.mappers.Mapper;
 import com.gsg.paltechlinker.services.CompanyService;
+import com.gsg.paltechlinker.services.InternshipService;
+
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,11 +18,13 @@ import org.springframework.http.ResponseEntity;
 public class CompanyController {
 
     private CompanyService companyService;
+    private InternshipService internshipService;
     private Mapper<CompanyEntity, CompanyDto> mapper;
 
 
-    public CompanyController(CompanyService companyService, Mapper<CompanyEntity, CompanyDto> mapper) {
+    public CompanyController(CompanyService companyService, InternshipService internshipService, Mapper<CompanyEntity, CompanyDto> mapper) {
         this.companyService = companyService;
+        this.internshipService = internshipService;
         this.mapper = mapper;
     }
     
@@ -71,6 +75,7 @@ public class CompanyController {
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteCompany(@PathVariable Long id) {
+        internshipService.deleteByCompanyId(id);
         companyService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
