@@ -206,7 +206,8 @@ const InternshipCard = ({ internship, onClick }) => {
           <Box
             sx={{
               display: "flex",
-              justifyContent: "flex-start",
+              justifyContent: "center",
+              alignItems: "center",
               marginTop: "auto",
             }}
           >

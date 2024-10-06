@@ -13,12 +13,14 @@ import {
 import Colors from "../../Assets/Colors/Colors";
 import CustomButton from "../../CommonComponents/CustomButton";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Profile = ({ companyId }) => {
   const [companyData, setCompanyData] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+
+  const storedCompanyId = localStorage.getItem("company_id");
 
   useEffect(() => {
     const fetchCompanyData = async () => {
@@ -111,17 +113,25 @@ const Profile = ({ companyId }) => {
         </Box>
 
         {/* Edit Profile Button */}
-        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-          <CustomButton
-            text="Edit Profile"
-            fullWidth={false}
-            onClick={() =>
-              navigate(`/EditProfile/${companyId}`, {
-                state: { company_id: companyId },
-              })
-            }
-          />
-        </Box>
+        {storedCompanyId && storedCompanyId === companyId && (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "flex-end",
+              marginBottom: 2,
+            }}
+          >
+            <CustomButton
+              text="Edit Profile"
+              fullWidth={false}
+              onClick={() =>
+                navigate(`/EditProfile/${companyId}`, {
+                  state: { company_id: companyId },
+                })
+              }
+            />
+          </Box>
+        )}
 
         <Box sx={{ marginBottom: 5 }}>
           <Typography
@@ -169,10 +179,26 @@ const Profile = ({ companyId }) => {
                   Email: {companyData?.contactEmail}
                 </Typography>
                 <Typography sx={{ fontFamily: "'Cairo', sans-serif" }}>
-                  Website: {companyData?.websiteLink}
+                  Website:{" "}
+                  <Link
+                    href={companyData?.websiteLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    color="inherit"
+                  >
+                    {companyData?.websiteLink}
+                  </Link>
                 </Typography>
                 <Typography sx={{ fontFamily: "'Cairo', sans-serif" }}>
-                  LinkedIn: {companyData?.socialAccount}
+                  LinkedIn:{" "}
+                  <Link
+                    href={companyData?.socialAccount}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    color="inherit"
+                  >
+                    {companyData?.socialAccount}
+                  </Link>
                 </Typography>
               </Box>
             }

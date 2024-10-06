@@ -13,7 +13,7 @@ import Colors from "../../Assets/Colors/Colors";
 import Image from "../../Assets/Images/login.png";
 import CustomButton from "../../CommonComponents/CustomButton";
 import axios from 'axios';
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const InternshipFormSchema = Yup.object().shape({
   internshipName: Yup.string().required("Internship name is required"),
@@ -29,6 +29,7 @@ const Add = () => {
   const [statuses, setStatuses] = useState([]);
   const [types, setTypes] = useState([]);
   const location = useLocation();
+  const navigate = useNavigate();
   const id = location.state?.company_id;
 
   const initialValues = {
@@ -79,6 +80,9 @@ const Add = () => {
       const response = await axios.post("http://localhost:8081/api/interns/create", internshipData);
       if (response.status === 201) {
         console.log("Internship added successfully!");
+        navigate(`/company/${id}`, {
+          state: { company_id: id },
+        });
       }
     } catch (error) {
       console.error("Error adding internship:", error);
