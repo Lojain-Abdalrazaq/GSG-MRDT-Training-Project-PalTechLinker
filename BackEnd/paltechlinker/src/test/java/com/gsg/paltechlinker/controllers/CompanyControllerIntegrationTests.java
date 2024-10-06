@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gsg.paltechlinker.TestDataUtil;
 import com.gsg.paltechlinker.domain.entities.CompanyEntity;
+import com.gsg.paltechlinker.domain.entities.InternshipEntity;
 import com.gsg.paltechlinker.services.CompanyService;
 
 
@@ -241,6 +242,22 @@ public class CompanyControllerIntegrationTests {
     public void testThatDeleteCompanyReturnsHttpStatus204ForExistingCompanyWithNoInterns() throws Exception {
         CompanyEntity companyEntity = TestDataUtil.createTestCompanyEntityA();
         CompanyEntity savedCompany = companyService.save(companyEntity);
+
+        mockMvc.perform(
+            MockMvcRequestBuilders.delete("/api/companies/delete/" + savedCompany.getId())
+                    .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+            MockMvcResultMatchers.status().isNoContent()
+        );
+    }
+
+    @Test
+    public void testThatDeleteCompanyReturnsHttpStatus204ForExistingCompanyWithIntern() throws Exception {
+        CompanyEntity companyEntity = TestDataUtil.createTestCompanyEntityA();
+        CompanyEntity savedCompany = companyService.save(companyEntity);
+
+        InternshipEntity internshipEntity = TestDataUtil.createTestInternshipEntityA();
+        internshipEntity.setCompany(savedCompany);
 
         mockMvc.perform(
             MockMvcRequestBuilders.delete("/api/companies/delete/" + savedCompany.getId())
