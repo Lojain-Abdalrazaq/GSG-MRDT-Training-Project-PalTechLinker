@@ -9,6 +9,8 @@ import com.gsg.paltechlinker.domain.entities.InternshipEntity;
 import com.gsg.paltechlinker.repositories.InternshipRepository;
 import com.gsg.paltechlinker.services.InternshipService;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class InternshipServiceImpl implements InternshipService {
 
@@ -60,6 +62,13 @@ public class InternshipServiceImpl implements InternshipService {
     @Override
     public List<InternshipEntity> findByCompanyId(Long companyId) {
         return internshipRepository.findByCompanyId(companyId);
+    }
+
+
+    @Transactional
+    @Override
+    public void deleteByCompanyId(Long companyId) {
+        internshipRepository.deleteByCompanyId(companyId);
     }
     
 }
