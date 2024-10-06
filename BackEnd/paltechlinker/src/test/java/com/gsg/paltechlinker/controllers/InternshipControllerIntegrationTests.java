@@ -9,11 +9,11 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gsg.paltechlinker.TestDataUtil;
 import com.gsg.paltechlinker.domain.entities.CompanyEntity;
 import com.gsg.paltechlinker.domain.entities.InternshipEntity;
+import com.gsg.paltechlinker.services.CompanyService;
 import com.gsg.paltechlinker.services.InternshipService;
 
 
@@ -23,13 +23,15 @@ import com.gsg.paltechlinker.services.InternshipService;
 public class InternshipControllerIntegrationTests {
     
     private InternshipService internshipService;
+    private CompanyService companyService;
     private MockMvc mockMvc;
     private ObjectMapper objectMapper;
 
     @Autowired
-    public InternshipControllerIntegrationTests(MockMvc mockMvc, InternshipService internshipService) {
+    public InternshipControllerIntegrationTests(MockMvc mockMvc, CompanyService companyService, InternshipService internshipService) {
         this.mockMvc = mockMvc;
         this.internshipService = internshipService;
+        this.companyService = companyService;
         this.objectMapper = new ObjectMapper();
     }
 
@@ -37,6 +39,11 @@ public class InternshipControllerIntegrationTests {
     public void testThatCreateInternshipReturnsHttpStatus201() throws Exception {
         InternshipEntity internshipEntity = TestDataUtil.createTestInternshipEntityA();
         internshipEntity.setId(null);
+        
+        CompanyEntity companyEntity = TestDataUtil.createTestCompanyEntityA();
+        companyService.save(companyEntity);
+        internshipEntity.setCompany(companyEntity);
+
         String internJson = objectMapper.writeValueAsString(internshipEntity);
         mockMvc.perform(
             MockMvcRequestBuilders.post("/api/interns/create")
