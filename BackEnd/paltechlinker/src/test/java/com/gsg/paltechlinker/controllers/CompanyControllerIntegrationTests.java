@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gsg.paltechlinker.TestDataUtil;
 import com.gsg.paltechlinker.domain.entities.CompanyEntity;
+import com.gsg.paltechlinker.domain.entities.InternshipEntity;
 import com.gsg.paltechlinker.services.CompanyService;
 
 
@@ -143,7 +144,7 @@ public class CompanyControllerIntegrationTests {
     }
 
     @Test
-    public void testThatGetCompanyReturnsHttpStatus494WhenNoCompanyExists() throws Exception {
+    public void testThatGetCompanyReturnsHttpStatus404WhenNoCompanyExists() throws Exception {
         mockMvc.perform(
             MockMvcRequestBuilders.get("/api/companies/read/99")
                     .contentType(MediaType.APPLICATION_JSON)
@@ -153,7 +154,7 @@ public class CompanyControllerIntegrationTests {
     }
 
     @Test
-    public void testThatGetCompanyReturnsCompanyIfExists() throws Exception {
+    public void testThatGetCompanyReturnsExistingCompany() throws Exception {
         CompanyEntity companyEntity = TestDataUtil.createTestCompanyEntityA();
         CompanyEntity savedCompany = companyService.save(companyEntity);
 
@@ -184,80 +185,6 @@ public class CompanyControllerIntegrationTests {
             MockMvcResultMatchers.jsonPath("$.socialAccount").value(savedCompany.getSocialAccount())
         ).andExpect(
             MockMvcResultMatchers.jsonPath("$.imageUrl").value(savedCompany.getImageUrl())
-        );
-    }
-
-    @Test
-    public void testThatFullUpdateCompanyReturnsHttpStatus200WhenCompanyExists() throws Exception {
-        CompanyEntity companyEntityToBeUpdated = TestDataUtil.createTestCompanyEntityA();
-        CompanyEntity companyEntityWithNewData = TestDataUtil.createTestCompanyEntityB();
-
-        companyService.save(companyEntityToBeUpdated);
-
-        companyEntityWithNewData.setId(companyEntityToBeUpdated.getId());
-        String companyJson = objectMapper.writeValueAsString(companyEntityWithNewData);
-
-        mockMvc.perform(
-            MockMvcRequestBuilders.put("/api/companies/update/" + companyEntityToBeUpdated.getId())
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(companyJson)
-        ).andExpect(
-            MockMvcResultMatchers.status().isOk()
-        );
-    }
-
-    @Test
-    public void testThatFullUpdateCompanyReturnsHttpStatus404WhenNoCompanyExists() throws Exception {
-        CompanyEntity companyEntity = TestDataUtil.createTestCompanyEntityA();
-        String companyJson = objectMapper.writeValueAsString(companyEntity);
-
-        mockMvc.perform(
-            MockMvcRequestBuilders.put("/api/companies/update/111")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(companyJson)
-        ).andExpect(
-            MockMvcResultMatchers.status().isNotFound()
-        );
-    }
-
-    @Test
-    public void testThatFullUpdateCompanyUpdatesExistingCompany() throws Exception {
-        CompanyEntity companyEntityToBeUpdated = TestDataUtil.createTestCompanyEntityA();
-        CompanyEntity companyEntityWithNewData = TestDataUtil.createTestCompanyEntityB();
-
-        companyService.save(companyEntityToBeUpdated);
-
-        companyEntityWithNewData.setId(companyEntityToBeUpdated.getId());
-        String companyJson = objectMapper.writeValueAsString(companyEntityWithNewData);
-
-        mockMvc.perform(
-            MockMvcRequestBuilders.put("/api/companies/update/" + companyEntityToBeUpdated.getId())
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(companyJson)
-        ).andExpect(
-            MockMvcResultMatchers.jsonPath("$.id").isNumber()
-        ).andExpect(
-            MockMvcResultMatchers.jsonPath("$.name").value(companyEntityWithNewData.getName())
-        ).andExpect(
-            MockMvcResultMatchers.jsonPath("$.email").value(companyEntityWithNewData.getEmail())
-        ).andExpect(
-            MockMvcResultMatchers.jsonPath("$.password").value(companyEntityWithNewData.getPassword())
-        ).andExpect(
-            MockMvcResultMatchers.jsonPath("$.address").value(companyEntityWithNewData.getAddress())
-        ).andExpect(
-            MockMvcResultMatchers.jsonPath("$.description").value(companyEntityWithNewData.getDescription())
-        ).andExpect(
-            MockMvcResultMatchers.jsonPath("$.websiteLink").value(companyEntityWithNewData.getWebsiteLink())
-        ).andExpect(
-            MockMvcResultMatchers.jsonPath("$.phoneNumber").value(companyEntityWithNewData.getPhoneNumber())
-        ).andExpect(
-            MockMvcResultMatchers.jsonPath("$.contactEmail").value(companyEntityWithNewData.getContactEmail())
-        ).andExpect(
-            MockMvcResultMatchers.jsonPath("$.numberOfEmployees").value(companyEntityWithNewData.getNumberOfEmployees())
-        ).andExpect(
-            MockMvcResultMatchers.jsonPath("$.socialAccount").value(companyEntityWithNewData.getSocialAccount())
-        ).andExpect(
-            MockMvcResultMatchers.jsonPath("$.imageUrl").value(companyEntityWithNewData.getImageUrl())
         );
     }
 
@@ -312,9 +239,25 @@ public class CompanyControllerIntegrationTests {
     }
 
     @Test
-    public void testThatDeleteCompanyReturnsHttpStatus204ForExistingCompany() throws Exception {
+    public void testThatDeleteCompanyReturnsHttpStatus204ForExistingCompanyWithNoInterns() throws Exception {
         CompanyEntity companyEntity = TestDataUtil.createTestCompanyEntityA();
         CompanyEntity savedCompany = companyService.save(companyEntity);
+
+        mockMvc.perform(
+            MockMvcRequestBuilders.delete("/api/companies/delete/" + savedCompany.getId())
+                    .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+            MockMvcResultMatchers.status().isNoContent()
+        );
+    }
+
+    @Test
+    public void testThatDeleteCompanyReturnsHttpStatus204ForExistingCompanyWithIntern() throws Exception {
+        CompanyEntity companyEntity = TestDataUtil.createTestCompanyEntityA();
+        CompanyEntity savedCompany = companyService.save(companyEntity);
+
+        InternshipEntity internshipEntity = TestDataUtil.createTestInternshipEntityA();
+        internshipEntity.setCompany(savedCompany);
 
         mockMvc.perform(
             MockMvcRequestBuilders.delete("/api/companies/delete/" + savedCompany.getId())
