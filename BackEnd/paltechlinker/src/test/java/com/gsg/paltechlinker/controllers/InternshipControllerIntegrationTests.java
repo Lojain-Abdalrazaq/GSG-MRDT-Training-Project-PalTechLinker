@@ -215,6 +215,8 @@ public class InternshipControllerIntegrationTests {
             MockMvcResultMatchers.jsonPath("$.applicationLink").value(internshipEntityToBeUpdated.getApplicationLink())
         ).andExpect(
             MockMvcResultMatchers.jsonPath("$.status").value(internshipEntityToBeUpdated.getStatus().name())
+        ).andExpect(
+            MockMvcResultMatchers.jsonPath("$.type").value(internshipEntityToBeUpdated.getType().name())
         );
     }
 
