@@ -40,6 +40,11 @@ public class ImageUploadController {
     }
 
     private String saveImage(MultipartFile file) throws IOException {
+        String contentType = file.getContentType();
+        if (!contentType.equals("image/jpeg") && !contentType.equals("image/png")) {
+            throw new IllegalArgumentException("Only JPEG or PNG images are allowed");
+        }
+
         Path uploadPath = Paths.get(uploadDir);
         if (!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);
