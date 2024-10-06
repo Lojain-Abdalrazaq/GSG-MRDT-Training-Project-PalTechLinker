@@ -233,6 +233,23 @@ public class InternshipControllerIntegrationTests {
     }
 
     @Test
+    public void testThatDeleteInternshipReturnsHttpStatus204ForExistingInternshipWithCompany() throws Exception {
+        InternshipEntity internshipEntity = TestDataUtil.createTestInternshipEntityA();
+        InternshipEntity savedInternshipEntity = internshipService.save(internshipEntity);
+
+        CompanyEntity companyEntity = TestDataUtil.createTestCompanyEntityA();
+        companyService.save(companyEntity);
+        internshipEntity.setCompany(companyEntity);
+
+        mockMvc.perform(
+            MockMvcRequestBuilders.delete("/api/interns/delete/" + savedInternshipEntity.getId())
+            .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+            MockMvcResultMatchers.status().isNoContent()
+        );
+    }
+
+    @Test
     public void testThatDeleteInternshipReturnsHttpStatus204ForNonExistingInternship() throws Exception {
         mockMvc.perform(
             MockMvcRequestBuilders.delete("/api/interns/delete/111")
