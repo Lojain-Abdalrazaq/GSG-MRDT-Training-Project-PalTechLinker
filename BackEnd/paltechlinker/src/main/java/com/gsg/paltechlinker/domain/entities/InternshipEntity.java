@@ -46,7 +46,7 @@ public class InternshipEntity {
     @Enumerated(EnumType.STRING)
     private InternshipType type;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "company_id")
     private CompanyEntity company;
 }
