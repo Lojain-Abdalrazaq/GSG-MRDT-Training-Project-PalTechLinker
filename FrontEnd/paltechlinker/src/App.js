@@ -11,7 +11,7 @@ import Comapny from "./Pages/CompanyProfile/Comapny";
 import Add from "./Pages/AddInternShip/AddInternShip";
 import Edit from "./Pages/EditInternShip/EditInternShip";
 import InternshipsPage from "./Pages/Internships/InternshipsPage";
-
+import EditProfile from "./Pages/EditProfile/EditProfile";
 
 function App() {
   return (
@@ -20,14 +20,14 @@ function App() {
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/Company/:id" element={<Comapny/>} />
+          <Route path="/Company/:id" element={<Comapny />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
-
           <Route path="/companies" element={<CompaniesPage />} />
           <Route path="/internships" element={<InternshipsPage />} />
           <Route path="/AddInternShip/:id" element={<Add />} />
           <Route path="/EditInternShip/:id" element={<Edit />} />
+          <Route path="/EditProfile/:id" element={<EditProfile />} />
         </Routes>
         <Footer />
       </div>
