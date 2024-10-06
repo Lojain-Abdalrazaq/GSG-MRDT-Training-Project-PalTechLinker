@@ -41,8 +41,8 @@ public class InternshipControllerIntegrationTests {
         internshipEntity.setId(null);
 
         CompanyEntity companyEntity = TestDataUtil.createTestCompanyEntityA();
-        companyService.save(companyEntity);
-        internshipEntity.setCompany(companyEntity);
+        CompanyEntity savedCompanyEntity = companyService.save(companyEntity);
+        internshipEntity.setCompany(savedCompanyEntity);
 
         String internJson = objectMapper.writeValueAsString(internshipEntity);
         mockMvc.perform(
@@ -60,8 +60,8 @@ public class InternshipControllerIntegrationTests {
         internshipEntity.setId(null);
         
         CompanyEntity companyEntity = TestDataUtil.createTestCompanyEntityA();
-        companyService.save(companyEntity);
-        internshipEntity.setCompany(companyEntity);
+        CompanyEntity savedCompanyEntity = companyService.save(companyEntity);
+        internshipEntity.setCompany(savedCompanyEntity);
 
         String internJson = objectMapper.writeValueAsString(internshipEntity);
         mockMvc.perform(
@@ -238,8 +238,8 @@ public class InternshipControllerIntegrationTests {
         InternshipEntity savedInternshipEntity = internshipService.save(internshipEntity);
 
         CompanyEntity companyEntity = TestDataUtil.createTestCompanyEntityA();
-        companyService.save(companyEntity);
-        internshipEntity.setCompany(companyEntity);
+        CompanyEntity savedCompanyEntity = companyService.save(companyEntity);
+        internshipEntity.setCompany(savedCompanyEntity);
 
         mockMvc.perform(
             MockMvcRequestBuilders.delete("/api/interns/delete/" + savedInternshipEntity.getId())
