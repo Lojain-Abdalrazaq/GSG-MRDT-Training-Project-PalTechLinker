@@ -44,7 +44,7 @@ const Register = () => {
       imageUrl: values.avatar
         ? URL.createObjectURL(values.avatar)
         : "http://example.com/updatedimage.png",
-      numberOfEmployees: 100,
+      numberOfEmployees: values.numberOfEmployees,
       socialAccount: values.linkedIn,
     };
 
@@ -67,15 +67,15 @@ const Register = () => {
         setSnackbarOpen(true);
       }
     } catch (error) {
-      const errorMessage = typeof error.response?.data === 'string'
-        ? error.response?.data
-        : error.response?.data?.message || "Signup failed. Please try again.";
-    
+      const errorMessage =
+        typeof error.response?.data === "string"
+          ? error.response?.data
+          : error.response?.data?.message || "Signup failed. Please try again.";
+
       setSnackbarSeverity("error");
       setSnackbarMessage(errorMessage);
       setSnackbarOpen(true);
     }
-    
   };
 
   const handleCloseSnackbar = () => {
