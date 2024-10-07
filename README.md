@@ -53,6 +53,10 @@ Add Internship Page:
 
 ![image](https://github.com/user-attachments/assets/0da4e1f6-89f5-4b20-8ef4-7356609236ec)
 
+Edit Internship Page:
+
+![image](https://github.com/user-attachments/assets/7a938b87-35fa-4126-9260-99fe9f24989b)
+
 Delete internship:
 
 ![image](https://github.com/user-attachments/assets/a2574b0b-1c18-4ad6-8e34-286f27f107a8)
