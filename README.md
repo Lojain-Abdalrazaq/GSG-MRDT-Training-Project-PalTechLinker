@@ -16,7 +16,8 @@ This platform addresses a common challenge for students: finding relevant intern
 - Search and filter internships.
 
 ## Screenshots
-... not done yet
+Home Page:
+![image](https://github.com/user-attachments/assets/1b58bc0e-679f-4515-93a4-5fa419bef442)
 
 ## Demo video
 You can watch the demo video [here](https://drive.google.com/file/d/1mDRerdW4Z5a5yhVM9JF3crIoPR5fj1b1/view).
