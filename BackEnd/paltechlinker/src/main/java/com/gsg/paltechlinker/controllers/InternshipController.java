@@ -53,10 +53,9 @@ public class InternshipController {
     @GetMapping("/read/{id}")
     public ResponseEntity<InternshipDto> getInternship(@PathVariable Long id) {
         Optional<InternshipEntity> foundInternshipEntity = internshipService.findOne(id);
-        return foundInternshipEntity.map(internshipEntity -> {
-            return new ResponseEntity<>(mapper.mapTo(internshipEntity), HttpStatus.OK);
-
-        }).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        return foundInternshipEntity.map(internshipEntity -> 
+            new ResponseEntity<>(mapper.mapTo(internshipEntity), HttpStatus.OK)
+        ).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @GetMapping("/read/all")
