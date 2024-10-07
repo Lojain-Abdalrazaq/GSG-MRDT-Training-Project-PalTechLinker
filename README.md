@@ -19,7 +19,7 @@ This platform addresses a common challenge for students: finding relevant intern
 ... not done yet
 
 ## Demo video
-... not done yet
+You can watch the demo video [here](https://drive.google.com/file/d/1mDRerdW4Z5a5yhVM9JF3crIoPR5fj1b1/view).
 
 ## Technologies Used
 - **Backend:** Spring Boot
