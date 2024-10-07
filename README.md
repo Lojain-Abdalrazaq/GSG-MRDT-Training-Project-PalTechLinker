@@ -4,7 +4,7 @@ A web application to link students with tech companies and the interns they prov
 The application was developed as part of our internship during the **Market Ready Developer Training program** at **Gaza Sky Geeks**.
 
 ## Description
-PalTechLinker is a platform designed to bridge the gap between students and local tech companies in Palestine, fascilitating access to internship opportunities. It enables companies to post internships, update their status, and provide details about their organization. Students can explore a comprehensive list of companies, search for suitable internships, apply, and track the status of their application in real time.
+PalTechLinker is a platform designed to bridge the gap between students and local tech companies in Palestine, facilitating access to internship opportunities. It enables companies to post internships, update their status, and provide details about their organization. Students can explore a comprehensive list of companies, search for suitable internships, apply, and track the status of their applications in real-time.
 
 This platform addresses a common challenge for students: finding relevant internships and identifying local companies. It also resolves the issue of uncertainty around application status by providing clear updates, ensuring students are aware if the application is open, closed, under review, or if a company has responded.
 
