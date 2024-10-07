@@ -9,11 +9,12 @@ PalTechLinker is a platform designed to bridge the gap between students and loca
 This platform addresses a common challenge for students: finding relevant internships and identifying local companies. It also resolves the issue of uncertainty around application status by providing clear updates, ensuring students are aware if the application is open, closed, under review, or if a company has responded.
 
 ## Features
-- Company registration and login.
+- Company registration, login, and logout.
 - CRUD operations for managing company profiles.
-- Posting internship opportunities.
-- Updating internships status.
-- Search and filter internships.
+- CRUD operations for managing internship opportunities.
+- Search and filter internships and companies.
+- Track application status.
+- View local companies and the internships they provide.
 
 ## Screenshots
 Home Page:
