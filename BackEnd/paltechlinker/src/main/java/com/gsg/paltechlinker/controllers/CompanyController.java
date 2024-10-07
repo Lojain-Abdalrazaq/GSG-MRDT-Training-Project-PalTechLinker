@@ -35,27 +35,11 @@ public class CompanyController {
     }
     
 
-    @PostMapping(path = "/create", consumes = "multipart/form-data")
-    public ResponseEntity<CompanyDto> createCompany(@RequestParam("file") MultipartFile file, @RequestBody CompanyDto companyDto) throws IOException {
+    @PostMapping(path = "/create")
+    public ResponseEntity<CompanyDto> createCompany(@RequestBody CompanyDto companyDto) {
         CompanyEntity companyEntity = mapper.mapFrom(companyDto);
-
-        String fileName = saveFile(file);
-        companyEntity.setImageUrl("http://localhost:8081/uploads/" + fileName);
-
         CompanyEntity savedCompanyEntity = companyService.save(companyEntity);
         return new ResponseEntity<>(mapper.mapTo(savedCompanyEntity), HttpStatus.CREATED);
-    }
-
-    private String saveFile(MultipartFile file) throws IOException {
-        // Create a unique file name
-        String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
-
-        // Save the file to the uploads directory
-        Path filePath = Paths.get(UPLOAD_DIR + fileName);
-        Files.createDirectories(filePath.getParent());  // Ensure the directory exists
-        Files.copy(file.getInputStream(), filePath);
-
-        return fileName;  // Return the file name for URL construction
     }
 
     @GetMapping("/read/{id}")
@@ -90,19 +74,33 @@ public class CompanyController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    // sign-up functionality
-    @PostMapping("/signup")
-    public ResponseEntity<String> signup(@RequestBody CompanyDto companyDto) {
+
+    @PostMapping(path = "/signup", consumes = "multipart/form-data")
+    public ResponseEntity<String> signup(@RequestParam("file") MultipartFile file, @RequestBody CompanyDto companyDto) throws IOException {
         // Check if email is already registered
         if (companyService.isEmailExists(companyDto.getEmail())) {
             return new ResponseEntity<>("Email already in use. Use different Email", HttpStatus.CONFLICT);
         }
         // Save new company
         CompanyEntity companyEntity = mapper.mapFrom(companyDto);
+        
+        String fileName = saveFile(file);
+        companyEntity.setImageUrl("http://localhost:8081/uploads/" + fileName);
+
         companyService.save(companyEntity);
         return new ResponseEntity<>("Signup successful.", HttpStatus.CREATED);
     }
 
+    private String saveFile(MultipartFile file) throws IOException {
+        // Create a unique file name
+        String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
 
+        // Save the file to the uploads directory
+        Path filePath = Paths.get(UPLOAD_DIR + fileName);
+        Files.createDirectories(filePath.getParent());  // Ensure the directory exists
+        Files.copy(file.getInputStream(), filePath);
+
+        return fileName;  // Return the file name for URL construction
+    }
 
 }
