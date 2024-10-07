@@ -39,10 +39,9 @@ public class CompanyController {
     @GetMapping("/read/{id}")
     public ResponseEntity<CompanyDto> getCompany(@PathVariable Long id) {
         Optional<CompanyEntity> foundCompanyEntity = companyService.findOne(id);
-        return foundCompanyEntity.map(companyEntity -> {
-            return new ResponseEntity<>(mapper.mapTo(companyEntity), HttpStatus.OK);
-
-        }).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        return foundCompanyEntity.map(
+            companyEntity -> new ResponseEntity<>(mapper.mapTo(companyEntity), HttpStatus.OK)
+        ).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
     
     @GetMapping("/read/all")
