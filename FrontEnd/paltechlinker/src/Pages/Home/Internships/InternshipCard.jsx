@@ -123,7 +123,7 @@ const InternshipCard = ({ internship }) => {
           flexDirection: { xs: "column", sm: "row" },
           padding: "1rem",
           backgroundColor: Colors.background,
-          height: 350,
+          height: 380,
           boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
           borderRadius: "15px",
           transition: "transform 0.3s ease, box-shadow 0.3s ease",
@@ -165,6 +165,13 @@ const InternshipCard = ({ internship }) => {
             sx={{ fontFamily: "'Cairo', sans-serif" }}
           >
             {internship.company.name}
+          </Typography>
+
+          <Typography
+            variant="body2"
+            sx={{ fontFamily: "'Cairo', sans-serif" }}
+          >
+            {internship.company.address}
           </Typography>
 
           <Typography

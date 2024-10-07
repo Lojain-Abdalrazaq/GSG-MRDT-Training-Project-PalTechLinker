@@ -17,6 +17,8 @@ const CompaniesIntern = ({ companyId }) => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  const storedCompanyId = localStorage.getItem("company_id");
+
   // Fetch internships data from the API
   useEffect(() => {
     const fetchInternships = async () => {
@@ -106,21 +108,22 @@ const CompaniesIntern = ({ companyId }) => {
           </Typography>
         )}
       </Grid>
-
-      <CustomButton
-        text="Add Internships"
-        fullWidth={false}
-        sx={{
-          fontSize: "1.2rem",
-          padding: "0.8rem 2.5rem",
-          borderRadius: "10px",
-        }}
-        onClick={() =>
-          navigate(`/AddInternShip/${companyId}`, {
-            state: { company_id: companyId },
-          })
-        }
-      />
+      {storedCompanyId && storedCompanyId === companyId && (
+        <CustomButton
+          text="Add Internships"
+          fullWidth={false}
+          sx={{
+            fontSize: "1.2rem",
+            padding: "0.8rem 2.5rem",
+            borderRadius: "10px",
+          }}
+          onClick={() =>
+            navigate(`/AddInternShip/${companyId}`, {
+              state: { company_id: companyId },
+            })
+          }
+        />
+      )}
     </Container>
   );
 };
